@@ -49,10 +49,7 @@ window.onload = function(){
   });
 
   $(window).resize(function(){
-    console.log('window resize');
-    console.log($(window).width());
     if ( $(window).width() < 1000 ){
-      console.log('width less than 1000');
       document.querySelectorAll('.thumb-wrap img').forEach( (img) => {
         img.setAttribute('data-scroll-speed', "0");
       })
@@ -78,7 +75,7 @@ function generateImgs(){
   thumbWrap.innerHTML = "";
   const wrapWidth = $(".thumb-wrap").width();
   const wrapHeight = $(".thumb-wrap").height();
-  const newWrapHeight = wrapHeight * (imgs.length/7);
+  const newWrapHeight = wrapHeight * (imgs.length/5);
 
   thumbWrap.style.height = newWrapHeight+"px";
 
@@ -103,7 +100,9 @@ function generateImgs(){
 
     const x = getRandomInt(0, (wrapWidth - elWidth));
     const xPerc = x * 100 / wrapWidth;
-    const posy = getRandomInt(0, (newWrapHeight));
+    
+    // adjust the amount subtracted from newWrapHeight to tweak how far from the bottom images are placed
+    const posy = getRandomInt(0, (newWrapHeight - 800));
     const scrollSpeed = getRandomInt(1, 8);
 
     const a = document.createElement("a");
