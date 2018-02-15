@@ -324,7 +324,9 @@ header {
       width: 80% !important;
       position: relative !important;
       top: auto !important;
-      left: auto !important; }
+      left: auto !important;
+      transform: none !important;
+      will-change: none !important; }
       .thumb-wrap img:hover {
         z-index: 7; } }
 

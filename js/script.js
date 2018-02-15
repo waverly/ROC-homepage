@@ -47,11 +47,21 @@ window.onload = function(){
         video.pause();
       }
   });
+
+  $(window).resize(function(){
+    console.log('window resize');
+    console.log($(window).width());
+    if ( $(window).width() < 1000 ){
+      console.log('width less than 1000');
+      document.querySelectorAll('.thumb-wrap img').forEach( (img) => {
+        img.setAttribute('data-scroll-speed', "0");
+      })
+    }
+  });
+
+
 }
 
-window.onresize = function(){
-  scrollSpeeds();
-}
 
 // determine if videoelement is in viewport
 $.fn.isInViewport = function() {
@@ -85,11 +95,9 @@ function generateImgs(){
     // use the parameters below to adjust image width. (first param is min width, second is max)
     if (random < 4){
       elWidth = getRandomInt(500, 700);
-      console.log('in if block', elWidth);
       const x = getRandomInt(0, (wrapWidth - elWidth));
     } else{
         elWidth = getRandomInt(200, 500);
-        console.log('in else block', elWidth);
         const x = getRandomInt(0, (wrapWidth - elWidth));
     }
 
@@ -142,12 +150,15 @@ function generateImgs(){
     this.el.css('transform', 'translateY(' + -(scrollTop / this.speed) + 'px)');
   };
 
+  // Initialization
+  $(function(){
+    $('[data-scroll-speed]').moveIt();
+  });
+
   //
 
   if ( $(window).width() > 999 ){
-    // Initialization
-    $(function(){
-      $('[data-scroll-speed]').moveIt();
-    });
+
   }
+
   }
