@@ -11,11 +11,9 @@ window.onload = function(){
     Prismic.getApi(apiEndpoint).then(function(api) {
       return api.query(
         Prismic.Predicates.at('document.type', 'slider')
-      ); // An empty query will return all the documents
+      );
       }).then(function(response) {
-        // console.log("Documents: ", response.results);
         const sliders = response.results;
-        console.log(sliders);
         handleSlides(sliders);
       }, function(err) {
       console.log("Something went wrong: ", err);
@@ -29,29 +27,23 @@ var index = 0,
     moveOffset = 0;
 
 var transitionCompleted = function(){
-    // console.log('inside transition completed fx');
     translationComplete = true;
 }
 
 
-// carousel has to be in its own function, called after carousel is loaded from apiEndpoint
-
 function carousel(uniqueID){
-
-      // ----------------------------------------
-      // carousel
 
       // get carousel wrapper element
       const carousel = document.querySelector('.'+uniqueID);
 
       // get node list of slides
-      const slides = document.querySelectorAll('.slide');
+      const slides = document.querySelector("."+uniqueID).querySelectorAll('.slide');
 
       // get amount of slides
-      amount = document.querySelector("."+uniqueID).querySelectorAll('.slide').length;
+      amount = slides.length;
 
       // get the width of the container
-      moveOffset = ( parseInt(window.getComputedStyle(document.querySelector('.carousel-container')).width, 10) )*.5;
+      moveOffset = ( parseInt(window.getComputedStyle(document.querySelector('.carousel-container')).width, 10) );
 
       // calcuate the width of the carousel
       const slideWidth = slides[0].offsetWidth;
@@ -77,13 +69,7 @@ function carousel(uniqueID){
       // end carousel
 }
 
-
-function shiftCells(slideArray){
-  slideArray.unshift(slideArray.pop());
-}
-
-
-function prev()
+function prev(uniqueID)
 {
     if(translationComplete === true)
     {
@@ -94,23 +80,23 @@ function prev()
             index = amount-1;
         }
         var outerIndex = (index) % amount;
+
         for(var i = 0; i < amount; i++)
         {
-            var slide = document.getElementsByClassName("slide")[i];
+            var slide = document.querySelector("."+uniqueID).querySelectorAll('.slide')[i];
             slide.style.opacity = '1';
             slide.style.transform = 'translateX('+(currTransl[i]+moveOffset)+'px)';
             currTransl[i] = currTransl[i]+moveOffset;
         }
-        var outerSlide = document.getElementsByClassName("slide")[outerIndex];
+        var outerSlide = document.querySelector("."+uniqueID).querySelectorAll('.slide')[outerIndex];
         outerSlide.style.transform = 'translateX('+(currTransl[outerIndex]-(moveOffset*amount))+'px)';
         outerSlide.style.opacity = '.5';
         outerSlide.style.zIndex = '1000';
-        outerSlide.classList.add('outer');
         currTransl[outerIndex] = currTransl[outerIndex]-moveOffset*(amount);
     }
 }
 
-function next()
+function next(uniqueID)
 {
     if(translationComplete === true)
     {
@@ -119,14 +105,14 @@ function next()
         index++;
         for(var i = 0; i < amount; i++)
         {
-            var slide = document.getElementsByClassName("slide")[i];
+            var slide = document.querySelector("."+uniqueID).querySelectorAll('.slide')[i];
             slide.style.opacity = '1';
             slide.style.transform = 'translateX('+(currTransl[i]-moveOffset)+'px)';
             currTransl[i] = currTransl[i]-moveOffset;
         }
-        var outerSlide = document.getElementsByClassName("slide")[outerIndex];
+        var outerSlide = document.querySelector("."+uniqueID).querySelectorAll('.slide')[outerIndex];
         outerSlide.style.transform = 'translateX('+(currTransl[outerIndex]+(moveOffset*amount))+'px)';
-        outerSlide.style.opacity = '0';
+        outerSlide.style.opacity = '.5';
         currTransl[outerIndex] = currTransl[outerIndex]+moveOffset*(amount);
     }
 }
@@ -137,9 +123,7 @@ function next()
 let counter = 0;
 
 function handleSlides(sliders){
-
   const container = document.querySelector('.container');
-
   sliders.forEach( (slide)=> {
     // console.log(slide);
     const title   = slide.data.title["0"].text;
@@ -205,13 +189,14 @@ function handleSlides(sliders){
        const x = e.pageX - offsetLeft;
         if(width/2 > x)
           // clicked on left
-          prev();
+          prev(uniqueID);
         else
           // clicked on right
-          next();
+          next(uniqueID);
     })
 
     container.appendChild(wrapper);
+    // setVars(uniqueID);
     carousel(uniqueID);
     counter++;
 

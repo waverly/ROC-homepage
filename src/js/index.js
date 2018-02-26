@@ -9,13 +9,21 @@ window.onload = function(){
   scrollSpeeds();
   const video = document.querySelector('.reel-wrap video');
   const muteButton = document.querySelector('.mute-video');
+  const muteIcon = document.querySelector('.fa-volume-off');
+  const volIcon = document.querySelector('.fa-volume-up');
 
   muteButton.addEventListener('click', function(){
     console.log('mute video was clicked');
     if( $("video").prop('muted') ) {
           $("video").prop('muted', false);
+          // display the mute button, hide the loud button
+          muteIcon.style.display = "block";
+          volIcon.style.display = "none";
+
     } else {
       $("video").prop('muted', true);
+      muteIcon.style.display = "none";
+      volIcon.style.display = "block";
     }
   })
 

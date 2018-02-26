@@ -3,6 +3,9 @@
 @import 'general';
 // @import 'mixins';
 
+.fa-volume-off{
+  display: none;
+}
 
 .img-wrapper{
   img{
@@ -37,6 +40,12 @@
     width: 40px;
     height: 40px;
     z-index: 10;
+
+    .fa-volume-up{
+      width: 100%;
+      height: 100%;
+      color: white;
+    }
 
     .fa-volume-off{
       width: 100%;
