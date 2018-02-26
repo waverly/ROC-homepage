@@ -2,11 +2,19 @@ const path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: './src/js/index.js',
+  // entry: './src/js/index.js',
+  entry: {
+    index: './src/js/index.js',
+    portfolio: './src/js/portfolio.js'
+  },
   output: {
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist')
   },
+  // output: {
+  //   filename: 'bundle.js',
+  //   path: path.resolve(__dirname, 'dist')
+  // },
   module: {
     rules: [
             {
@@ -22,7 +30,14 @@ module.exports = {
             hash: true,
             inject: 'head',
             template: './src/index.html',
+            chunks: ['index'],
             filename: './index.html' //relative to root of the application
+        }),
+        new HtmlWebpackPlugin({
+            hash: true,
+            template: './src/portfolio.html',
+            chunks: ['portfolio'],
+            filename: './portfolio.html' //relative to root of the application
         })
    ]
 }

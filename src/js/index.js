@@ -1,6 +1,6 @@
 import './../css/style.scss';
 import _ from 'lodash';
-import * as prismicService from './prismic-service'
+// import * as prismicService from './prismic-service'
 // import * as Prismic from 'prismic-javascript';
 
 

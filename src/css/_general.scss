@@ -1,7 +1,22 @@
 @import 'mixins';
+@import 'variables';
 
 /*....................................General settings..................................*/
 
+header{
+  background-color: $light-grey;
+  height: $nav-height;
+  width: 100vw;
+  z-index: $z-nav;
+  top: 0;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  img{
+    height: 80%;
+  }
+}
 
 
 
