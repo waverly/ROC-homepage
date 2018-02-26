@@ -50,6 +50,20 @@
   }
 }
 
+.bio-wrap{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: lime;
+  min-height: 100vh;
+
+  h1{
+    width: 50%;
+    font-size: 2em;
+    line-height: 2em;
+  }
+}
+
 .collage-wrap{
   height: 100vh;
   width: 100vw;

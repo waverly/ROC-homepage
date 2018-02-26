@@ -4,8 +4,6 @@ import _ from 'lodash';
 
 window.onload = function(){
 
-    console.log("window loaded");
-
     // api call
     var Prismic = require('prismic-javascript');
     var apiEndpoint = "https://rideorcry.prismic.io/api/v2";
@@ -17,7 +15,7 @@ window.onload = function(){
       }).then(function(response) {
         // console.log("Documents: ", response.results);
         const sliders = response.results;
-        // console.log(sliders);
+        console.log(sliders);
         handleSlides(sliders);
       }, function(err) {
       console.log("Something went wrong: ", err);
@@ -31,66 +29,59 @@ var index = 0,
     moveOffset = 0;
 
 var transitionCompleted = function(){
-    console.log('inside transition completed fx');
+    // console.log('inside transition completed fx');
     translationComplete = true;
 }
 
 
 // carousel has to be in its own function, called after carousel is loaded from apiEndpoint
 
-function carousel(){
+function carousel(uniqueID){
 
       // ----------------------------------------
       // carousel
 
       // get carousel wrapper element
-      const carousel = document.querySelector('.carousel-wrap');
+      const carousel = document.querySelector('.'+uniqueID);
 
       // get node list of slides
       const slides = document.querySelectorAll('.slide');
-      console.log(slides);
 
       // get amount of slides
-      amount = document.getElementsByClassName("slide").length;
+      amount = document.querySelector("."+uniqueID).querySelectorAll('.slide').length;
 
       // get the width of the container
-      moveOffset = parseInt(window.getComputedStyle(document.querySelector('.carousel-container')).width, 10);
+      moveOffset = ( parseInt(window.getComputedStyle(document.querySelector('.carousel-container')).width, 10) )*.5;
 
       // calcuate the width of the carousel
-      carousel.style.width = (amount * moveOffset) + 'px';
+      const slideWidth = slides[0].offsetWidth;
+      carousel.style.width = (amount * slideWidth) + 'px';
 
       // prevent multiple click when transition
       for(var i = 0; i < amount; i++)
       {
           currTransl[i] = -(moveOffset);
-          console.log(currTransl[i]);
           slides[i].addEventListener("transitionend", transitionCompleted, true);
           slides[i].addEventListener("webkitTransitionEnd", transitionCompleted, true);
           slides[i].addEventListener("oTransitionEnd", transitionCompleted, true);
           slides[i].addEventListener("MSTransitionEnd", transitionCompleted, true);
       }
 
-      const slideArray = Array.from(slides);
-      console.log({slideArray});
-      shiftCells(slideArray);
-
       const lastItem = amount - 1;
-      console.log({carousel, lastItem});
-
       // add the last item to the start so that translateX(-moveOffset) works (In case the first click is the previous button)
       carousel.insertBefore(carousel.children[lastItem],carousel.children[0]);
 
-
-        // add click events to control arrows
-      document.getElementById('prev').addEventListener('click', prev, true);
-      document.getElementById('next').addEventListener('click', next, true);
-
       // test variables
-      console.log({carousel, amount, moveOffset});
 
       // ----------------------------------------
       // end carousel
 }
+
+
+function shiftCells(slideArray){
+  slideArray.unshift(slideArray.pop());
+}
+
 
 function prev()
 {
@@ -112,18 +103,17 @@ function prev()
         }
         var outerSlide = document.getElementsByClassName("slide")[outerIndex];
         outerSlide.style.transform = 'translateX('+(currTransl[outerIndex]-(moveOffset*amount))+'px)';
-        outerSlide.style.opacity = '0';
+        outerSlide.style.opacity = '.5';
+        outerSlide.style.zIndex = '1000';
+        outerSlide.classList.add('outer');
         currTransl[outerIndex] = currTransl[outerIndex]-moveOffset*(amount);
     }
 }
 
 function next()
 {
-    console.log('in next fx');
-    console.log({index, amount});
     if(translationComplete === true)
     {
-        console.log('transition was completed');
         translationComplete = false;
         var outerIndex = (index) % amount;
         index++;
@@ -141,30 +131,23 @@ function next()
     }
 }
 
-function shiftCells(slideArray){
-
-  slideArray.unshift(slideArray.pop());
-  // // slideArray.pop();
-  console.log({slideArray});
-}
-
 // end of carousel
+
+// counter
+let counter = 0;
 
 function handleSlides(sliders){
 
-  // console.log('inside handle slide');
   const container = document.querySelector('.container');
 
   sliders.forEach( (slide)=> {
+    // console.log(slide);
     const title   = slide.data.title["0"].text;
     const bgColor = slide.data["bg-color"];
     const clientName = slide.data["client-name"]["0"].text;
     const projectIntro = slide.data["project-intro"]["0"].text;
     const link = slide.data["visit-link"].url;
     const images = slide.data.body["0"].items;
-
-    // console.log(slide);
-    // console.log({ title, bgColor, clientName, projectIntro, link, images });
 
     // inner a tag
     const a = document.createElement('a');
@@ -184,9 +167,12 @@ function handleSlides(sliders){
     innerWrapper.classList.add('inner-wrap');
     wrapper.appendChild(innerWrapper);
 
+    const uniqueID = "carousel_" + counter;
+
     // carousel slide wrapper
     const carouselWrapper = document.createElement('div');
     carouselWrapper.classList.add('carousel-wrap');
+    carouselWrapper.classList.add(uniqueID);
     innerWrapper.appendChild(carouselWrapper);
 
     // text slide
@@ -202,7 +188,6 @@ function handleSlides(sliders){
     carouselWrapper.appendChild(textSlide);
 
     images.forEach( (image) => {
-        // console.log(image)
         const imgWrap = document.createElement('div');
         imgWrap.classList.add('slide');
         imgWrap.classList.add('img-slide');
@@ -217,7 +202,6 @@ function handleSlides(sliders){
     wrapper.addEventListener("click", function(e){
       const width = wrapper.offsetWidth;
       const offsetLeft = wrapper.offsetLeft;
-      console.log(e, width);
        const x = e.pageX - offsetLeft;
         if(width/2 > x)
           // clicked on left
@@ -228,7 +212,8 @@ function handleSlides(sliders){
     })
 
     container.appendChild(wrapper);
-    carousel();
+    carousel(uniqueID);
+    counter++;
 
   });
 }

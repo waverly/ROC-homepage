@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 13);
+/******/ 	return __webpack_require__(__webpack_require__.s = 12);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -18272,13 +18272,12 @@ module.exports = globalObj.fetch.bind(globalObj);
 /* 9 */,
 /* 10 */,
 /* 11 */,
-/* 12 */,
-/* 13 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__css_portfolio_scss__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__css_portfolio_scss__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__css_portfolio_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__css_portfolio_scss__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_lodash__);
@@ -18287,8 +18286,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 window.onload = function(){
-
-    console.log("window loaded");
 
     // api call
     var Prismic = __webpack_require__(6);
@@ -18301,7 +18298,7 @@ window.onload = function(){
       }).then(function(response) {
         // console.log("Documents: ", response.results);
         const sliders = response.results;
-        // console.log(sliders);
+        console.log(sliders);
         handleSlides(sliders);
       }, function(err) {
       console.log("Something went wrong: ", err);
@@ -18315,66 +18312,59 @@ var index = 0,
     moveOffset = 0;
 
 var transitionCompleted = function(){
-    console.log('inside transition completed fx');
+    // console.log('inside transition completed fx');
     translationComplete = true;
 }
 
 
 // carousel has to be in its own function, called after carousel is loaded from apiEndpoint
 
-function carousel(){
+function carousel(uniqueID){
 
       // ----------------------------------------
       // carousel
 
       // get carousel wrapper element
-      const carousel = document.querySelector('.carousel-wrap');
+      const carousel = document.querySelector('.'+uniqueID);
 
       // get node list of slides
       const slides = document.querySelectorAll('.slide');
-      console.log(slides);
 
       // get amount of slides
-      amount = document.getElementsByClassName("slide").length;
+      amount = document.querySelector("."+uniqueID).querySelectorAll('.slide').length;
 
       // get the width of the container
-      moveOffset = parseInt(window.getComputedStyle(document.querySelector('.carousel-container')).width, 10);
+      moveOffset = ( parseInt(window.getComputedStyle(document.querySelector('.carousel-container')).width, 10) )*.5;
 
       // calcuate the width of the carousel
-      carousel.style.width = (amount * moveOffset) + 'px';
+      const slideWidth = slides[0].offsetWidth;
+      carousel.style.width = (amount * slideWidth) + 'px';
 
       // prevent multiple click when transition
       for(var i = 0; i < amount; i++)
       {
           currTransl[i] = -(moveOffset);
-          console.log(currTransl[i]);
           slides[i].addEventListener("transitionend", transitionCompleted, true);
           slides[i].addEventListener("webkitTransitionEnd", transitionCompleted, true);
           slides[i].addEventListener("oTransitionEnd", transitionCompleted, true);
           slides[i].addEventListener("MSTransitionEnd", transitionCompleted, true);
       }
 
-      const slideArray = Array.from(slides);
-      console.log({slideArray});
-      shiftCells(slideArray);
-
       const lastItem = amount - 1;
-      console.log({carousel, lastItem});
-
       // add the last item to the start so that translateX(-moveOffset) works (In case the first click is the previous button)
       carousel.insertBefore(carousel.children[lastItem],carousel.children[0]);
 
-
-        // add click events to control arrows
-      document.getElementById('prev').addEventListener('click', prev, true);
-      document.getElementById('next').addEventListener('click', next, true);
-
       // test variables
-      console.log({carousel, amount, moveOffset});
 
       // ----------------------------------------
       // end carousel
 }
+
+
+function shiftCells(slideArray){
+  slideArray.unshift(slideArray.pop());
+}
+
 
 function prev()
 {
@@ -18396,18 +18386,17 @@ function prev()
         }
         var outerSlide = document.getElementsByClassName("slide")[outerIndex];
         outerSlide.style.transform = 'translateX('+(currTransl[outerIndex]-(moveOffset*amount))+'px)';
-        outerSlide.style.opacity = '0';
+        outerSlide.style.opacity = '.5';
+        outerSlide.style.zIndex = '1000';
+        outerSlide.classList.add('outer');
         currTransl[outerIndex] = currTransl[outerIndex]-moveOffset*(amount);
     }
 }
 
 function next()
 {
-    console.log('in next fx');
-    console.log({index, amount});
     if(translationComplete === true)
     {
-        console.log('transition was completed');
         translationComplete = false;
         var outerIndex = (index) % amount;
         index++;
@@ -18425,30 +18414,23 @@ function next()
     }
 }
 
-function shiftCells(slideArray){
-
-  slideArray.unshift(slideArray.pop());
-  // // slideArray.pop();
-  console.log({slideArray});
-}
-
 // end of carousel
+
+// counter
+let counter = 0;
 
 function handleSlides(sliders){
 
-  // console.log('inside handle slide');
   const container = document.querySelector('.container');
 
   sliders.forEach( (slide)=> {
+    // console.log(slide);
     const title   = slide.data.title["0"].text;
     const bgColor = slide.data["bg-color"];
     const clientName = slide.data["client-name"]["0"].text;
     const projectIntro = slide.data["project-intro"]["0"].text;
     const link = slide.data["visit-link"].url;
     const images = slide.data.body["0"].items;
-
-    // console.log(slide);
-    // console.log({ title, bgColor, clientName, projectIntro, link, images });
 
     // inner a tag
     const a = document.createElement('a');
@@ -18468,9 +18450,12 @@ function handleSlides(sliders){
     innerWrapper.classList.add('inner-wrap');
     wrapper.appendChild(innerWrapper);
 
+    const uniqueID = "carousel_" + counter;
+
     // carousel slide wrapper
     const carouselWrapper = document.createElement('div');
     carouselWrapper.classList.add('carousel-wrap');
+    carouselWrapper.classList.add(uniqueID);
     innerWrapper.appendChild(carouselWrapper);
 
     // text slide
@@ -18486,7 +18471,6 @@ function handleSlides(sliders){
     carouselWrapper.appendChild(textSlide);
 
     images.forEach( (image) => {
-        // console.log(image)
         const imgWrap = document.createElement('div');
         imgWrap.classList.add('slide');
         imgWrap.classList.add('img-slide');
@@ -18501,7 +18485,6 @@ function handleSlides(sliders){
     wrapper.addEventListener("click", function(e){
       const width = wrapper.offsetWidth;
       const offsetLeft = wrapper.offsetLeft;
-      console.log(e, width);
        const x = e.pageX - offsetLeft;
         if(width/2 > x)
           // clicked on left
@@ -18512,18 +18495,19 @@ function handleSlides(sliders){
     })
 
     container.appendChild(wrapper);
-    carousel();
+    carousel(uniqueID);
+    counter++;
 
   });
 }
 
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(15);
+var content = __webpack_require__(14);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -18569,7 +18553,7 @@ if(false) {
 }
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -18577,7 +18561,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline; }\n\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n  display: block; }\n\nbody {\n  line-height: 1; }\n\nol, ul {\n  list-style: none; }\n\nblockquote, q {\n  quotes: none; }\n\nblockquote:before, blockquote:after,\nq:before, q:after {\n  content: '';\n  content: none; }\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\n/*....................................SCSS VARIABLES..................................*/\n/*....................................................................................*/\n/*....................................SCSS VARIABLES..................................*/\n/*....................................................................................*/\n/*.................................................................................*/\n/*$break-large-desktop: 2500px;*/\n/*$break-infinite: 500000px;*/\n/*....................................SCSS MIXINS..................................*/\n/*....................................SCSS VARIABLES..................................*/\n/*....................................................................................*/\n/*....................................General settings..................................*/\nheader {\n  background-color: #F5F5F5;\n  height: 100px;\n  width: 100vw;\n  z-index: 13;\n  top: 0;\n  position: fixed;\n  display: flex;\n  justify-content: center;\n  align-items: center; }\n  header img {\n    height: 80%; }\n\n/*.....................TEXT MARK STYLES......................*/\n::-moz-selection {\n  background: transparent;\n  text-shadow: none; }\n\n::selection {\n  background: transparent;\n  text-shadow: none; }\n\n/*.....................ACTIVE CLASSES......................*/\n.blacked_text {\n  color: #FFFFFF; }\n\n.blacked_path {\n  fill: #FFFFFF; }\n\n.blacked_background {\n  background-color: #000000; }\n\n/*....................HIDING SCROLLBAR.....................*/\n::-webkit-scrollbar {\n  display: none; }\n\n* {\n  -webkit-overflow-scrolling: touch; }\n\n*, *:before, *:after {\n  box-sizing: inherit;\n  outline: 0; }\n\n/*.....................GENERAL STYLES......................*/\nhtml {\n  font-family: helvetica;\n  width: 100%;\n  margin: 0, 0;\n  padding: 0, 0;\n  box-sizing: border-box;\n  background-color: transparent; }\n\nbody {\n  width: 100vw;\n  height: auto;\n  margin: 0, 0;\n  padding: 0, 0;\n  display: block;\n  position: relative;\n  background: #FFFFFF; }\n\np, a, li {\n  font-size: 12px;\n  list-style-type: none;\n  letter-spacing: 1px;\n  color: #000000; }\n\ninput, textarea, select, a, li {\n  text-decoration: none; }\n\na {\n  cursor: pointer;\n  font-size: 12px;\n  line-height: 26px;\n  font-family: helvetica, sans-serif;\n  letter-spacing: 1px;\n  /*  @if $media == large-desktop {\n    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }\n  }*/ }\n  @media only screen and (min-width: 0px) and (max-width: 767px) {\n    a {\n      font-size: 12px;\n      line-height: 17px; } }\n\nh3 a {\n  font-size: 36px;\n  line-height: 45px;\n  font-family: helvetica, sans-serif;\n  letter-spacing: 1px;\n  /*  @if $media == large-desktop {\n    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }\n  }*/\n  color: #e2e2e2; }\n  @media only screen and (min-width: 0px) and (max-width: 767px) {\n    h3 a {\n      font-size: 18px;\n      line-height: 20px; } }\n\nh4 a {\n  font-size: 20px;\n  line-height: 20px;\n  font-family: helvetica, sans-serif;\n  letter-spacing: 1px;\n  /*  @if $media == large-desktop {\n    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }\n  }*/ }\n  @media only screen and (min-width: 0px) and (max-width: 767px) {\n    h4 a {\n      font-size: 16px;\n      line-height: 20px; } }\n\n.a-hover {\n  color: #000000;\n  transition: color 0.4s ease;\n  -webkit-transition: color 0.4s ease;\n  -moz-transition: color 0.4s ease;\n  -ms-transition: color 0.4s ease;\n  -o-transition: color 0.4s ease; }\n  .a-hover:hover {\n    color: #F5F5F5;\n    /*  @if $media == large-desktop {\n    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }\n  }*/\n    /*  @if $media == large-desktop {\n    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }\n  }*/\n    /*  @if $media == large-desktop {\n    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }\n  }*/ }\n    @media only screen and (min-width: 0px) and (max-device-width: 767px) {\n      .a-hover:hover {\n        color: #000000 !important; } }\n    @media only screen and (min-device-width: 768px) and (max-device-width: 1022px) and (orientation: portrait) {\n      .a-hover:hover {\n        color: #000000 !important; } }\n    @media only screen and (min-device-width: 768px) and (max-device-width: 1022px) and (orientation: landscape) {\n      .a-hover:hover {\n        color: #000000 !important; } }\n\np {\n  font-size: 12px;\n  line-height: 26px;\n  font-family: helvetica, sans-serif;\n  letter-spacing: 1px;\n  /*  @if $media == large-desktop {\n    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }\n  }*/ }\n  @media only screen and (min-width: 0px) and (max-width: 767px) {\n    p {\n      font-size: 12px;\n      line-height: 17px; } }\n\nh1 {\n  font-size: 85px;\n  line-height: 110px;\n  font-family: helvetica, sans-serif;\n  letter-spacing: 2px;\n  /*  @if $media == large-desktop {\n    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }\n  }*/ }\n  @media only screen and (min-width: 0px) and (max-width: 767px) {\n    h1 {\n      font-size: 25px;\n      line-height: 40px; } }\n\nh2 {\n  font-size: 52px;\n  line-height: 65px;\n  font-family: helvetica, sans-serif;\n  letter-spacing: 0px;\n  /*  @if $media == large-desktop {\n    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }\n  }*/ }\n  @media only screen and (min-width: 0px) and (max-width: 767px) {\n    h2 {\n      font-size: 20px;\n      line-height: 36px; } }\n\nh3 {\n  font-size: 36px;\n  line-height: 45px;\n  font-family: helvetica, sans-serif;\n  letter-spacing: 1px;\n  /*  @if $media == large-desktop {\n    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }\n  }*/ }\n  @media only screen and (min-width: 0px) and (max-width: 767px) {\n    h3 {\n      font-size: 18px;\n      line-height: 20px; } }\n\nh4 {\n  font-size: 20px;\n  line-height: 20px;\n  font-family: helvetica, sans-serif;\n  letter-spacing: 1px;\n  /*  @if $media == large-desktop {\n    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }\n  }*/ }\n  @media only screen and (min-width: 0px) and (max-width: 767px) {\n    h4 {\n      font-size: 16px;\n      line-height: 20px; } }\n\n.pop {\n  position: fixed;\n  width: 100vw;\n  height: 50px;\n  position: fixed;\n  bottom: 0;\n  z-index: 14;\n  border-top: 1px solid black;\n  background: rgba(255, 255, 255, 0.2); }\n\n/*.........................MAIN............................*/\ntable {\n  width: 100vw;\n  height: 100vh; }\n  table tr td {\n    vertical-align: middle; }\n\n/*....................................SCSS VARIABLES..................................*/\n/*....................................................................................*/\n/*.................................................................................*/\n/*$break-large-desktop: 2500px;*/\n/*$break-infinite: 500000px;*/\n/*....................................SCSS MIXINS..................................*/\n.animate {\n  -webkit-transition-duration: .5s;\n  -moz-transition-duration: .5s;\n  -o-transition-duration: .5s;\n  transition-duration: .5s;\n  -webkit-transition-property: -webkit-transform;\n  -moz-transition-property: -moz-transform;\n  -o-transition-property: -o-transform;\n  transition-property: transform; }\n\n.container {\n  width: 100vw;\n  height: 100vh; }\n  .container button {\n    position: relative;\n    z-index: 1000; }\n  .container .carousel-container {\n    width: 500px;\n    height: 332px;\n    position: relative;\n    margin: 50px auto 0;\n    margin-top: 200px;\n    border: 10px solid #000;\n    border-radius: 10px;\n    overflow-x: auto; }\n    .container .carousel-container .inner-wrap {\n      max-width: 100%;\n      height: 100%;\n      margin: 0; }\n    .container .carousel-container .carousel-wrap {\n      position: relative;\n      width: 5000px;\n      height: 100%;\n      padding: 0;\n      margin: 0; }\n    .container .carousel-container .animate {\n      -webkit-transition-duration: 2s;\n      -moz-transition-duration: 2s;\n      -o-transition-duration: 2s;\n      transition-duration: 2s;\n      -webkit-transition-property: -webkit-transform;\n      -moz-transition-property: -moz-transform;\n      -o-transition-property: -o-transform;\n      transition-property: transform; }\n    .container .carousel-container .text-slide {\n      background-color: red; }\n    .container .carousel-container .slide {\n      border: 3px black solid;\n      position: relative;\n      float: left;\n      transform: translateX(-500px);\n      width: 500px;\n      height: 100%;\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      -webkit-transition-duration: 2s;\n      -moz-transition-duration: 2s;\n      -o-transition-duration: 2s;\n      transition-duration: 2s;\n      -webkit-transition-property: -webkit-transform;\n      -moz-transition-property: -moz-transform;\n      -o-transition-property: -o-transform;\n      transition-property: transform; }\n      .container .carousel-container .slide img {\n        max-height: 80%;\n        max-width: 80%;\n        height: auto;\n        width: auto; }\n", ""]);
+exports.push([module.i, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline; }\n\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n  display: block; }\n\nbody {\n  line-height: 1; }\n\nol, ul {\n  list-style: none; }\n\nblockquote, q {\n  quotes: none; }\n\nblockquote:before, blockquote:after,\nq:before, q:after {\n  content: '';\n  content: none; }\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\n/*....................................SCSS VARIABLES..................................*/\n/*....................................................................................*/\n/*....................................SCSS VARIABLES..................................*/\n/*....................................................................................*/\n/*.................................................................................*/\n/*$break-large-desktop: 2500px;*/\n/*$break-infinite: 500000px;*/\n/*....................................SCSS MIXINS..................................*/\n/*....................................SCSS VARIABLES..................................*/\n/*....................................................................................*/\n/*....................................General settings..................................*/\nheader {\n  background-color: #F5F5F5;\n  height: 100px;\n  width: 100vw;\n  z-index: 13;\n  top: 0;\n  position: fixed;\n  display: flex;\n  justify-content: center;\n  align-items: center; }\n  header img {\n    height: 80%; }\n\n/*.....................TEXT MARK STYLES......................*/\n::-moz-selection {\n  background: transparent;\n  text-shadow: none; }\n\n::selection {\n  background: transparent;\n  text-shadow: none; }\n\n/*.....................ACTIVE CLASSES......................*/\n.blacked_text {\n  color: #FFFFFF; }\n\n.blacked_path {\n  fill: #FFFFFF; }\n\n.blacked_background {\n  background-color: #000000; }\n\n/*....................HIDING SCROLLBAR.....................*/\n::-webkit-scrollbar {\n  display: none; }\n\n* {\n  -webkit-overflow-scrolling: touch; }\n\n*, *:before, *:after {\n  box-sizing: inherit;\n  outline: 0; }\n\n/*.....................GENERAL STYLES......................*/\nhtml {\n  font-family: helvetica;\n  width: 100%;\n  margin: 0, 0;\n  padding: 0, 0;\n  box-sizing: border-box;\n  background-color: transparent; }\n\nbody {\n  width: 100vw;\n  height: auto;\n  margin: 0, 0;\n  padding: 0, 0;\n  display: block;\n  position: relative;\n  background: #FFFFFF; }\n\np, a, li {\n  font-size: 12px;\n  list-style-type: none;\n  letter-spacing: 1px;\n  color: #000000; }\n\ninput, textarea, select, a, li {\n  text-decoration: none; }\n\na {\n  cursor: pointer;\n  font-size: 12px;\n  line-height: 26px;\n  font-family: helvetica, sans-serif;\n  letter-spacing: 1px;\n  /*  @if $media == large-desktop {\n    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }\n  }*/ }\n  @media only screen and (min-width: 0px) and (max-width: 767px) {\n    a {\n      font-size: 12px;\n      line-height: 17px; } }\n\nh3 a {\n  font-size: 36px;\n  line-height: 45px;\n  font-family: helvetica, sans-serif;\n  letter-spacing: 1px;\n  /*  @if $media == large-desktop {\n    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }\n  }*/\n  color: #e2e2e2; }\n  @media only screen and (min-width: 0px) and (max-width: 767px) {\n    h3 a {\n      font-size: 18px;\n      line-height: 20px; } }\n\nh4 a {\n  font-size: 20px;\n  line-height: 20px;\n  font-family: helvetica, sans-serif;\n  letter-spacing: 1px;\n  /*  @if $media == large-desktop {\n    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }\n  }*/ }\n  @media only screen and (min-width: 0px) and (max-width: 767px) {\n    h4 a {\n      font-size: 16px;\n      line-height: 20px; } }\n\n.a-hover {\n  color: #000000;\n  transition: color 0.4s ease;\n  -webkit-transition: color 0.4s ease;\n  -moz-transition: color 0.4s ease;\n  -ms-transition: color 0.4s ease;\n  -o-transition: color 0.4s ease; }\n  .a-hover:hover {\n    color: #F5F5F5;\n    /*  @if $media == large-desktop {\n    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }\n  }*/\n    /*  @if $media == large-desktop {\n    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }\n  }*/\n    /*  @if $media == large-desktop {\n    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }\n  }*/ }\n    @media only screen and (min-width: 0px) and (max-device-width: 767px) {\n      .a-hover:hover {\n        color: #000000 !important; } }\n    @media only screen and (min-device-width: 768px) and (max-device-width: 1022px) and (orientation: portrait) {\n      .a-hover:hover {\n        color: #000000 !important; } }\n    @media only screen and (min-device-width: 768px) and (max-device-width: 1022px) and (orientation: landscape) {\n      .a-hover:hover {\n        color: #000000 !important; } }\n\np {\n  font-size: 12px;\n  line-height: 26px;\n  font-family: helvetica, sans-serif;\n  letter-spacing: 1px;\n  /*  @if $media == large-desktop {\n    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }\n  }*/ }\n  @media only screen and (min-width: 0px) and (max-width: 767px) {\n    p {\n      font-size: 12px;\n      line-height: 17px; } }\n\nh1 {\n  font-size: 85px;\n  line-height: 110px;\n  font-family: helvetica, sans-serif;\n  letter-spacing: 2px;\n  /*  @if $media == large-desktop {\n    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }\n  }*/ }\n  @media only screen and (min-width: 0px) and (max-width: 767px) {\n    h1 {\n      font-size: 25px;\n      line-height: 40px; } }\n\nh2 {\n  font-size: 52px;\n  line-height: 65px;\n  font-family: helvetica, sans-serif;\n  letter-spacing: 0px;\n  /*  @if $media == large-desktop {\n    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }\n  }*/ }\n  @media only screen and (min-width: 0px) and (max-width: 767px) {\n    h2 {\n      font-size: 20px;\n      line-height: 36px; } }\n\nh3 {\n  font-size: 36px;\n  line-height: 45px;\n  font-family: helvetica, sans-serif;\n  letter-spacing: 1px;\n  /*  @if $media == large-desktop {\n    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }\n  }*/ }\n  @media only screen and (min-width: 0px) and (max-width: 767px) {\n    h3 {\n      font-size: 18px;\n      line-height: 20px; } }\n\nh4 {\n  font-size: 20px;\n  line-height: 20px;\n  font-family: helvetica, sans-serif;\n  letter-spacing: 1px;\n  /*  @if $media == large-desktop {\n    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }\n  }*/ }\n  @media only screen and (min-width: 0px) and (max-width: 767px) {\n    h4 {\n      font-size: 16px;\n      line-height: 20px; } }\n\n.pop {\n  position: fixed;\n  width: 100vw;\n  height: 50px;\n  position: fixed;\n  bottom: 0;\n  z-index: 14;\n  border-top: 1px solid black;\n  background: rgba(255, 255, 255, 0.2); }\n\n/*.........................MAIN............................*/\ntable {\n  width: 100vw;\n  height: 100vh; }\n  table tr td {\n    vertical-align: middle; }\n\n/*....................................SCSS VARIABLES..................................*/\n/*....................................................................................*/\n/*.................................................................................*/\n/*$break-large-desktop: 2500px;*/\n/*$break-infinite: 500000px;*/\n/*....................................SCSS MIXINS..................................*/\n.animate {\n  -webkit-transition-duration: .5s;\n  -moz-transition-duration: .5s;\n  -o-transition-duration: .5s;\n  transition-duration: .5s;\n  -webkit-transition-property: -webkit-transform;\n  -moz-transition-property: -moz-transform;\n  -o-transition-property: -o-transform;\n  transition-property: transform; }\n\n.container {\n  width: 100vw;\n  height: 100vh; }\n  .container button {\n    position: relative;\n    z-index: 1000; }\n  .container .carousel-container {\n    width: 100vw;\n    height: calc(100vh - 100px);\n    position: relative;\n    margin: 0;\n    overflow-x: auto; }\n    .container .carousel-container:first-of-type {\n      margin-top: 100px; }\n    .container .carousel-container .inner-wrap {\n      max-width: 100%;\n      height: 100%;\n      margin: 0; }\n    .container .carousel-container .carousel-wrap {\n      position: relative;\n      width: 5000px;\n      height: 100%;\n      padding: 0;\n      margin: 0; }\n    .container .carousel-container .animate {\n      -webkit-transition-duration: 2s;\n      -moz-transition-duration: 2s;\n      -o-transition-duration: 2s;\n      transition-duration: 2s;\n      -webkit-transition-property: -webkit-transform;\n      -moz-transition-property: -moz-transform;\n      -o-transition-property: -o-transform;\n      transition-property: transform; }\n    .container .carousel-container .slide {\n      position: relative;\n      float: left;\n      width: 60vw;\n      height: 100%;\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      -webkit-transition-duration: 2s;\n      -moz-transition-duration: 2s;\n      -o-transition-duration: 2s;\n      transition-duration: 2s;\n      -webkit-transition-property: -webkit-transform;\n      -moz-transition-property: -moz-transform;\n      -o-transition-property: -o-transform;\n      transition-property: transform; }\n      .container .carousel-container .slide img {\n        max-height: 80%;\n        max-width: 80%;\n        height: auto;\n        width: auto; }\n", ""]);
 
 // exports
 

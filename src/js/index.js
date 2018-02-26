@@ -54,8 +54,34 @@ window.onload = function(){
     console.log("Something went wrong: ", err);
   });
 
-  function handleThumbnails(thumbnails){
+  Prismic.getApi(apiEndpoint).then(function(api) {
+    return api.query(
+      Prismic.Predicates.at('document.type', 'bio')
+    ); // An empty query will return all the documents
+    }).then(function(response) {
+      // console.log("Documents: ", response.results);
+      const bios = response.results;
+      handleBio(bios);
+    }, function(err) {
+    console.log("Something went wrong: ", err);
+  });
 
+  function handleBio(bios){
+    const ranNum = getRandomInt(0, (bios.length - 1));
+    console.log(ranNum);
+
+    const currBio = bios[ranNum];
+
+    const textNode = document.createElement('h1');
+    textNode.innerHTML = currBio.data.bio["0"].text;
+
+    console.log({currBio, ranNum, textNode});
+
+    document.querySelector('.bio-wrap').appendChild(textNode);
+
+  }
+
+  function handleThumbnails(thumbnails){
     // console.log(thumbnails);
     thumbnails.forEach( (thumbnail) => {
       const src   = thumbnail.data.image.url;
@@ -139,7 +165,9 @@ window.onload = function(){
 
       //
     }
-
-
 }
 // end window on load
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
