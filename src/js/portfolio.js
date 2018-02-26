@@ -153,7 +153,6 @@ function shiftCells(slideArray){
 function handleSlides(sliders){
 
   // console.log('inside handle slide');
-
   const container = document.querySelector('.container');
 
   sliders.forEach( (slide)=> {
@@ -214,6 +213,19 @@ function handleSlides(sliders){
         carouselWrapper.appendChild(imgWrap);
       }
     );
+
+    wrapper.addEventListener("click", function(e){
+      const width = wrapper.offsetWidth;
+      const offsetLeft = wrapper.offsetLeft;
+      console.log(e, width);
+       const x = e.pageX - offsetLeft;
+        if(width/2 > x)
+          // clicked on left
+          prev();
+        else
+          // clicked on right
+          next();
+    })
 
     container.appendChild(wrapper);
     carousel();
