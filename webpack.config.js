@@ -35,6 +35,7 @@ module.exports = {
         }),
         new HtmlWebpackPlugin({
             hash: true,
+            // inject: 'head',
             template: './src/portfolio.html',
             chunks: ['portfolio'],
             filename: './portfolio.html' //relative to root of the application

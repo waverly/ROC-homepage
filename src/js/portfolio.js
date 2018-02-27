@@ -1,6 +1,8 @@
 import './../css/portfolio.scss';
 var Prismic = require('prismic-javascript');
 var apiEndpoint = "https://rideorcry.prismic.io/api/v2";
+var $ = require('jquery');
+var swipe = require('jquery-touchswipe');
 
 const container = document.querySelector('.container');
 
@@ -43,6 +45,23 @@ function handleSlide(slide){
         wrapper.style.backgroundColor = bgColor;
         a.appendChild(wrapper);
 
+  const prevArr = document.createElement('div');
+        prevArr.classList.add('prev-arrow');
+        prevArr.style.cursor="pointer";
+  const previcon = document.createElement('i');
+        previcon.classList.add('fas', 'fa-arrow-left');
+        prevArr.appendChild(previcon);
+        wrapper.appendChild(prevArr);
+
+  const nextArr = document.createElement('div');
+        nextArr.classList.add('next-arrow');
+        nextArr.style.cursor="pointer";
+  const nexticon = document.createElement('i');
+        nexticon.classList.add('fas', 'fa-arrow-right');
+        nextArr.appendChild(nexticon);
+        wrapper.appendChild(nextArr);
+
+
   // inner div wrapper
   const innerWrapper = document.createElement('div');
         innerWrapper.classList.add('inner-wrap');
@@ -53,9 +72,13 @@ function handleSlide(slide){
         carouselWrapper.classList.add('carousel-wrap');
   innerWrapper.appendChild(carouselWrapper);
 
+
+  let counter = 0;
   // text slide
   const textSlide = document.createElement('div');
         textSlide.classList.add('slide', 'text-slide');
+        textSlide.setAttribute('id', counter);
+        counter++;
 
   const client = document.createElement('h3');
   client.innerHTML = clientName;
@@ -73,6 +96,8 @@ function handleSlide(slide){
   images.forEach( (image) => {
       const wrapper = document.createElement('div');
             wrapper.classList.add('slide', 'img-slide');
+            wrapper.setAttribute('id', counter);
+            counter++;
       const src = image.thumbnail.url;
       const img = document.createElement('img');
       img.setAttribute('src', src);
@@ -123,6 +148,9 @@ function handleSlide(slide){
           console.log("this is what the PREV outer slide transforms", currTransl[outerIndex]-(moveOffset*amount));
           outerSlide.style.transform = 'translateX('+(calculateTranslate)+'px)';
           outerSlide.style.opacity = '0';
+          outerSlide.style.opacity = '0';
+          outerSlide.transitionDuration = '0';
+          outerSlide.transitionProperty = 'none';
           outerSlide.addEventListener("transitionend", function(){
             console.log('outer slide transition should be over');
             outerSlide.style.opacity = '1';
@@ -159,6 +187,7 @@ function handleSlide(slide){
           console.log("this is what the outer slide transforms", currTransl[outerIndex]+(moveOffset*amount));
           outerSlide.style.transform = 'translateX('+(currTransl[outerIndex]+(moveOffset*amount))+'px)';
           outerSlide.style.opacity = '0';
+          outerSlide.transitionDuration = '0';
           currTransl[outerIndex] = currTransl[outerIndex]+moveOffset*(amount);
       }
   }
@@ -176,6 +205,25 @@ function handleSlide(slide){
         // clicked on right
         next();
   });
+
+  prevArr.addEventListener("click", prev);
+  nextArr.addEventListener("click", next);
+
+//   $(wrapper).swipe( {
+//     //Generic swipe handler for all directions
+//     swipe:function(event, direction, distance, duration, fingerCount, fingerData) {
+//       alert("You swiped " + direction );
+//       if (direction == "right"){
+//         prev();
+//       }
+//       else if (direction == "right"){
+//         next();
+//       }
+//     }
+//   });
+//
+// //Set some options later
+// $(wrapper).swipe( {fingers:2} );
 
   container.appendChild(wrapper);
 
