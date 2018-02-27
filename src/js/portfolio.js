@@ -1,4 +1,4 @@
-import './../css/portfolio.scss';
+// import './../css/portfolio.scss';
 var Prismic = require('prismic-javascript');
 var apiEndpoint = "https://rideorcry.prismic.io/api/v2";
 var $ = require('jquery');
@@ -201,8 +201,6 @@ function handleSlide(slide){
         transition('prev');
       }
   }
-
-
 }
 
 

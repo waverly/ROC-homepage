@@ -10,14 +10,14 @@ module.exports = {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist')
   },
-  module: {
-    rules: [
-            {
-                test:/\.(s*)css$/,
-                use:['style-loader','css-loader', 'sass-loader']
-             }
-     ]
-  },
+  // module: {
+  //   rules: [
+  //           {
+  //               test:/\.(s*)css$/,
+  //               use:['style-loader','css-loader', 'sass-loader']
+  //            }
+  //    ]
+  // },
   watch:true,
   resolve: { extensions: [".js", ".ts"] },
   plugins: [
