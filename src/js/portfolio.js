@@ -6,8 +6,6 @@ var swipe = require('jquery-touchswipe');
 
 const container = document.querySelector('.container');
 
-
-
 function handleSlide(slide){
 
   console.log('inside of handle slide');
@@ -27,9 +25,11 @@ function handleSlide(slide){
   let currTransl = [];
   let translationComplete = true;
   let moveOffset = 0;
+  const slides = []
   // end carousel declarations
 
   var transitionCompleted = function(){
+    console.log('transition completed')
       translationComplete = true;
   }
 
@@ -73,13 +73,9 @@ function handleSlide(slide){
   innerWrapper.appendChild(carouselWrapper);
 
 
-  let counter = 0;
   // text slide
   const textSlide = document.createElement('div');
         textSlide.classList.add('slide', 'text-slide');
-        textSlide.setAttribute('id', counter);
-        counter++;
-
   const client = document.createElement('h3');
   client.innerHTML = clientName;
   const intro = document.createElement('p');
@@ -90,124 +86,173 @@ function handleSlide(slide){
   textSlide.appendChild(client);
   textSlide.appendChild(intro);
   textSlide.appendChild(visit);
-  carouselWrapper.appendChild(textSlide);
+
+  // Add the text slide to the slides array
+  slides.push(textSlide)
+
+  // carouselWrapper.appendChild(textSlide);
 
 
-  images.forEach( (image) => {
+  images.map((image, index) => {
       const wrapper = document.createElement('div');
             wrapper.classList.add('slide', 'img-slide');
-            wrapper.setAttribute('id', counter);
-            counter++;
       const src = image.thumbnail.url;
       const img = document.createElement('img');
       img.setAttribute('src', src);
       wrapper.appendChild(img);
-      carouselWrapper.appendChild(wrapper);
+      // carouselWrapper.appendChild(wrapper);
+      slides.push(wrapper)
   });
+
+  slides.map(slide => carouselWrapper.appendChild(slide))
+  
+  // Add 'clones' to the beginning and end so it seems like an endless loop
+  const cloneCount = 2
+  // - put clones of the first two at the end
+  slides.slice(0, cloneCount).map((slide) => {
+    const clone = slide.cloneNode(true)
+    clone.classList.add('slide--clone')
+    carouselWrapper.appendChild(clone)
+  })
+  slides.slice(-cloneCount).reverse().map((slide) => {
+    const clone = slide.cloneNode(true)
+    clone.classList.add('slide--clone')
+    carouselWrapper.insertBefore(clone, carouselWrapper.firstChild)
+
+  })
   // end HTML elements
 
-  let extra;
+  // let extra;
 
-  // Prev/Next fxs These will only have access to the
-  //     variables within the scope of this 'instance' of buildSlider
-  const prev = () => {
-      // gauge if screen is mobile
+  // // Prev/Next fxs These will only have access to the
+  // //     variables within the scope of this 'instance' of buildSlider
+  // const prev = () => {
+  //     // gauge if screen is mobile
 
-      if (wrapper.offsetWidth > 999){
-        extra = wrapper.offsetWidth*.2;
-      }
-      else{
-        extra = 0;
-      }
+  //     if (wrapper.offsetWidth > 999){
+  //       extra = wrapper.offsetWidth*.2;
+  //     }
+  //     else{
+  //       extra = 0;
+  //     }
 
-      // const extra = wrapper.offsetWidth*.2;
+  //     // const extra = wrapper.offsetWidth*.2;
 
-      console.log(translationComplete);
-      if(translationComplete === true)
-      {
-          translationComplete = false;
-          index--;
-          if(index == -1)
-          {
-              index = amount-1;
-          }
-          var outerIndex = (index) % amount;
+  //     console.log(translationComplete);
+  //     if(translationComplete === true)
+  //     {
+  //         translationComplete = false;
+  //         index--;
+  //         if(index == -1)
+  //         {
+  //             index = amount-1;
+  //         }
+  //         var outerIndex = (index) % amount;
 
-          for(var i = 0; i < amount; i++)
-          {
-              var slide = carouselWrapper.querySelectorAll('.slide')[i];
-              slide.style.opacity = '1';
-              slide.style.transform = 'translateX('+(currTransl[i]+moveOffset+extra)+'px)';
-              // slide.style.transform = 'translateX('+(currTransl[i]-moveOffset+(wrapper.offsetWidth*.2))+'px)';
-              currTransl[i] = currTransl[i]+moveOffset;
-          }
-          var outerSlide = carouselWrapper.querySelectorAll('.slide')[outerIndex];
+  //         for(var i = 0; i < amount; i++)
+  //         {
+  //             var slide = carouselWrapper.querySelectorAll('.slide')[i];
+  //             slide.style.opacity = '1';
+  //             slide.style.transform = 'translateX('+(currTransl[i]+moveOffset+extra)+'px)';
+  //             // slide.style.transform = 'translateX('+(currTransl[i]-moveOffset+(wrapper.offsetWidth*.2))+'px)';
+  //             currTransl[i] = currTransl[i]+moveOffset;
+  //         }
+  //         var outerSlide = carouselWrapper.querySelectorAll('.slide')[outerIndex];
 
-          const calculateTranslate = currTransl[outerIndex]-(moveOffset*amount)+extra;
+  //         const calculateTranslate = currTransl[outerIndex]-(moveOffset*amount)+extra;
 
-          console.log("this is what the PREV outer slide transforms", currTransl[outerIndex]-(moveOffset*amount));
-          outerSlide.style.transform = 'translateX('+(calculateTranslate)+'px)';
-          outerSlide.style.opacity = '0';
-          outerSlide.style.opacity = '0';
-          outerSlide.transitionDuration = '0';
-          outerSlide.transitionProperty = 'none';
-          outerSlide.addEventListener("transitionend", function(){
-            console.log('outer slide transition should be over');
-            outerSlide.style.opacity = '1';
-          })
-          currTransl[outerIndex] = currTransl[outerIndex]-moveOffset*(amount);
-      }
+  //         console.log("this is what the PREV outer slide transforms", currTransl[outerIndex]-(moveOffset*amount));
+  //         outerSlide.style.transform = 'translateX('+(calculateTranslate)+'px)';
+  //         outerSlide.style.opacity = '0';
+  //         outerSlide.style.opacity = '0';
+  //         outerSlide.transitionDuration = '0';
+  //         outerSlide.transitionProperty = 'none';
+  //         outerSlide.addEventListener("transitionend", function(){
+  //           console.log('outer slide transition should be over');
+  //           outerSlide.style.opacity = '1';
+  //         })
+  //         currTransl[outerIndex] = currTransl[outerIndex]-moveOffset*(amount);
+  //     }
+  // }
+
+
+  const moveToSlide = (newIndex, noTransition = false) => {
+    const wrapperTranslateX = `${-(newIndex + cloneCount) * 100}%`
+    if (noTransition) carouselWrapper.classList.add('no-transition')
+    carouselWrapper.style.transform = `translateX(${wrapperTranslateX})`
+    // Reading a layout property is a little 'hack' that forces the browser to clear its CSS cache
+    // If we didn't do this, the transition would still occur even with the `no-transition` class
+    carouselWrapper.offsetHeight
+    if (noTransition) carouselWrapper.classList.remove('no-transition')
+    index = newIndex
   }
 
-  const next = () => {
-      // gauge if screen is mobile
-
-      if (wrapper.offsetWidth > 999){
-        extra = wrapper.offsetWidth*.2;
-      }
-      else{
-        extra = 0;
-      }
-
-      if(translationComplete === true)
-      {
-          translationComplete = false;
-          var outerIndex = (index) % amount;
-          index++;
-          for(var i = 0; i < amount; i++)
-          {
-              console.log("beginning of the for loop" + currTransl[i]);
-              var slide = carouselWrapper.querySelectorAll('.slide')[i];
-              slide.style.opacity = '1';
-              slide.style.transform = 'translateX('+(currTransl[i]-moveOffset+extra)+'px)';
-              currTransl[i] = currTransl[i]-moveOffset;
-              console.log("end of the for loop" + currTransl[i]);
-          }
-          var outerSlide = carouselWrapper.querySelectorAll('.slide')[outerIndex];
-          console.log("this is what the outer slide transforms", currTransl[outerIndex]+(moveOffset*amount));
-          outerSlide.style.transform = 'translateX('+(currTransl[outerIndex]+(moveOffset*amount))+'px)';
-          outerSlide.style.opacity = '0';
-          outerSlide.transitionDuration = '0';
-          currTransl[outerIndex] = currTransl[outerIndex]+moveOffset*(amount);
-      }
+  const transition = (direction) => {
+    console.log(translationComplete)
+    if (translationComplete) {
+      translationComplete = false
+      // Calculate the new index
+      const newIndex = (direction === 'prev') ?
+        // If the direction is `prev`, reduce the current index by 1,
+        // or, if it's already at 0, set it to the end
+        (index === 0) ? images.length : index - 1
+        // Otherwise, inc the index, or set it to 0 if we're at the end
+        : (index === images.length) ? 0 : index + 1
+      
+      // If we're about to go all the way around the carousel,
+      // move to the cloned element immediately, then transition to the final slide
+      if (newIndex === 0 && direction === 'next') moveToSlide(-1, true)
+      if (newIndex === images.length && direction === 'prev') moveToSlide(images.length + 1, true)
+      moveToSlide(newIndex)
+    }
   }
+
+  // const next = () => {
+  //     // gauge if screen is mobile
+
+  //     if (wrapper.offsetWidth > 999){
+  //       extra = wrapper.offsetWidth*.2;
+  //     }
+  //     else{
+  //       extra = 0;
+  //     }
+
+  //     if(translationComplete === true)
+  //     {
+  //         translationComplete = false;
+  //         var outerIndex = (index) % amount;
+  //         index++;
+  //         for(var i = 0; i < amount; i++)
+  //         {
+  //             console.log("beginning of the for loop" + currTransl[i]);
+  //             var slide = carouselWrapper.querySelectorAll('.slide')[i];
+  //             slide.style.opacity = '1';
+  //             slide.style.transform = 'translateX('+(currTransl[i]-moveOffset+extra)+'px)';
+  //             currTransl[i] = currTransl[i]-moveOffset;
+  //             console.log("end of the for loop" + currTransl[i]);
+  //         }
+  //         var outerSlide = carouselWrapper.querySelectorAll('.slide')[outerIndex];
+  //         console.log("this is what the outer slide transforms", currTransl[outerIndex]+(moveOffset*amount));
+  //         outerSlide.style.transform = 'translateX('+(currTransl[outerIndex]+(moveOffset*amount))+'px)';
+  //         outerSlide.style.opacity = '0';
+  //         outerSlide.transitionDuration = '0';
+  //         currTransl[outerIndex] = currTransl[outerIndex]+moveOffset*(amount);
+  //     }
+  // }
   // end prev/next fxs
 
   // 5 event listening & binding
   wrapper.addEventListener("click",(e) => {
     const width = wrapper.offsetWidth;
     const offsetLeft = wrapper.offsetLeft;
-     const x = e.pageX - offsetLeft;
-      if(width/2 > x)
-        // clicked on left
-        prev();
-      else
-        // clicked on right
-        next();
+    const x = e.pageX - offsetLeft;
+    const direction = (width / 2 > x) ? 'prev' : 'next'
+    transition(direction)
   });
 
-  prevArr.addEventListener("click", prev);
-  nextArr.addEventListener("click", next);
+  prevArr.addEventListener("click", () => transition('prev'));
+  nextArr.addEventListener("click", () => transition('next'));
+  carouselWrapper.addEventListener("transitionend", transitionCompleted, true);
 
 //   $(wrapper).swipe( {
 //     //Generic swipe handler for all directions
@@ -226,44 +271,42 @@ function handleSlide(slide){
 // $(wrapper).swipe( {fingers:2} );
 
   container.appendChild(wrapper);
+  moveToSlide(0, true)
 
-  // carousel function
-  // get carousel wrapper element
-  // const carousel = document.querySelector('.'+uniqueID);
-  console.log(carouselWrapper);
+  // // carousel function
+  // // get carousel wrapper element
+  // // const carousel = document.querySelector('.'+uniqueID);
+  // console.log(carouselWrapper);
 
-  // get node list of slides
-  // const slides = document.querySelector("."+uniqueID).querySelectorAll('.slide');
-  const slides = carouselWrapper.querySelectorAll(".slide");
+  // // get node list of slides
+  // // const slides = document.querySelector("."+uniqueID).querySelectorAll('.slide');
+  // const slides = carouselWrapper.querySelectorAll(".slide");
 
-  // get amount of slides
-  amount = slides.length;
+  // // get amount of slides
+  // amount = slides.length;
 
-  // calcuate the width of the carousel
-  const slideWidth = slides[0].offsetWidth;
+  // // calcuate the width of the carousel
+  // const slideWidth = slides[0].offsetWidth;
 
-  // adjust the width of the carouselWrapper
-  carouselWrapper.style.width = (amount * slideWidth + 3) + 'px';
+  // // adjust the width of the carouselWrapper
+  // carouselWrapper.style.width = (amount * slideWidth + 3) + 'px';
 
-  // calculate moveOffset by getting ratio of slide to container
-  // const containerWidth = document.querySelector('.carousel-container').offsetWidth;
-  moveOffset = slideWidth;
-  // console.log({slideWidth, containerWidth, moveOffset});
+  // // calculate moveOffset by getting ratio of slide to container
+  // // const containerWidth = document.querySelector('.carousel-container').offsetWidth;
+  // moveOffset = slideWidth;
+  // // console.log({slideWidth, containerWidth, moveOffset});
 
   // prevent multiple click when transition
-  for(var i = 0; i < amount; i++)
-  {
-      currTransl[i] = -(moveOffset);
-      slides[i].addEventListener("transitionend", transitionCompleted, true);
-      slides[i].addEventListener("webkitTransitionEnd", transitionCompleted, true);
-      slides[i].addEventListener("oTransitionEnd", transitionCompleted, true);
-      slides[i].addEventListener("MSTransitionEnd", transitionCompleted, true);
-  }
+  slides.map((slide) => {
+    slide.addEventListener("webkitTransitionEnd", transitionCompleted, true);
+    slide.addEventListener("oTransitionEnd", transitionCompleted, true);
+    slide.addEventListener("MSTransitionEnd", transitionCompleted, true);
+  })
 
-  const lastItem = amount - 1;
-  // add the last item to the start so that translateX(-moveOffset) works (In case the first click is the previous button)
-  carouselWrapper.insertBefore(carouselWrapper.children[lastItem],carouselWrapper.children[0]);
-  // end carousel fx
+  // const lastItem = amount - 1;
+  // // add the last item to the start so that translateX(-moveOffset) works (In case the first click is the previous button)
+  // carouselWrapper.insertBefore(carouselWrapper.children[lastItem],carouselWrapper.children[0]);
+  // // end carousel fx
 
 }
 
