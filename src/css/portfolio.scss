@@ -31,7 +31,7 @@
 		height: calc(100vh - 100px);
 		position: relative;
 		margin: 0;
-    overflow-x: auto;
+    overflow-x: hidden;
 
 		&:first-of-type{
 			margin-top: 100px;
@@ -67,25 +67,25 @@
     }
 
     .text-slide{
-      // background-color: red;
+      flex-direction: column;
     }
 
     .slide{
       position: relative;
     	float: left;
-    	transform: translateX(-100vw);
-      width: 100vw;
-			// transform: translateX(-40vw);
-			//width: 60vw;
+    	// transform: translateX(-100vw);
+      // width: 100vw;
+			transform: translateX(-40vw);
+			width: 60vw;
 
       height: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
-      -webkit-transition-duration: 2s;
-      -moz-transition-duration: 2s;
-      -o-transition-duration: 2s;
-      transition-duration: 2s;
+      -webkit-transition-duration: 1s;
+      -moz-transition-duration: 1s;
+      -o-transition-duration: 1s;
+      transition-duration: 1s;
       -webkit-transition-property: -webkit-transform;
       -moz-transition-property: -moz-transform;
       -o-transition-property: -o-transform;
@@ -99,6 +99,13 @@
       }
     }
   }
+}
 
+@media screen and (max-width: 1000px){
+
+	.container .carousel-container .slide{
+		transform: translateX(-100vw);
+		width: 100vw;
+	}
 
 }
