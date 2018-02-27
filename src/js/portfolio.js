@@ -8,6 +8,8 @@ const container = document.querySelector('.container');
 
 function handleSlide(slide){
 
+  console.log('inside of handle slide');
+
   // extract data
   const title   = slide.data.title["0"].text;
   const bgColor = slide.data["bg-color"];
@@ -85,12 +87,15 @@ function handleSlide(slide){
   //     variables within the scope of this 'instance' of buildSlider
   const prev = () => {
       // gauge if screen is mobile
+
       if (wrapper.offsetWidth > 999){
-        const extra = wrapper.offsetWidth*.2;
+        extra = wrapper.offsetWidth*.2;
       }
       else{
-        const extra = 0;
+        extra = 0;
       }
+
+      // const extra = wrapper.offsetWidth*.2;
 
       console.log(translationComplete);
       if(translationComplete === true)
@@ -128,6 +133,7 @@ function handleSlide(slide){
 
   const next = () => {
       // gauge if screen is mobile
+
       if (wrapper.offsetWidth > 999){
         extra = wrapper.offsetWidth*.2;
       }
@@ -213,6 +219,7 @@ function handleSlide(slide){
 
 }
 
+
 window.onload = function(){
 
     // api call
@@ -224,6 +231,9 @@ window.onload = function(){
       }).then(function(response) {
         const sliders = response.results;
         sliders.forEach((slide)=>{handleSlide(slide)});
+        // window.addEventListener('resize', function(){
+        //   sliders.forEach((slide)=>{handleSlide(slide)});
+        // });
       }, function(err) {
       console.log("Something went wrong: ", err);
     });
