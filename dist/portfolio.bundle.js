@@ -11594,9 +11594,6 @@ function handleSlide(slide){
   // Add the text slide to the slides array
   slides.push(textSlide)
 
-  // carouselWrapper.appendChild(textSlide);
-
-
   images.map((image, index) => {
       const wrapper = document.createElement('div');
             wrapper.classList.add('slide', 'img-slide');
@@ -11609,7 +11606,7 @@ function handleSlide(slide){
   });
 
   slides.map(slide => carouselWrapper.appendChild(slide))
-  
+
   // Add 'clones' to the beginning and end so it seems like an endless loop
   const cloneCount = 2
   // - put clones of the first two at the end
@@ -11622,63 +11619,8 @@ function handleSlide(slide){
     const clone = slide.cloneNode(true)
     clone.classList.add('slide--clone')
     carouselWrapper.insertBefore(clone, carouselWrapper.firstChild)
-
   })
   // end HTML elements
-
-  // let extra;
-
-  // // Prev/Next fxs These will only have access to the
-  // //     variables within the scope of this 'instance' of buildSlider
-  // const prev = () => {
-  //     // gauge if screen is mobile
-
-  //     if (wrapper.offsetWidth > 999){
-  //       extra = wrapper.offsetWidth*.2;
-  //     }
-  //     else{
-  //       extra = 0;
-  //     }
-
-  //     // const extra = wrapper.offsetWidth*.2;
-
-  //     console.log(translationComplete);
-  //     if(translationComplete === true)
-  //     {
-  //         translationComplete = false;
-  //         index--;
-  //         if(index == -1)
-  //         {
-  //             index = amount-1;
-  //         }
-  //         var outerIndex = (index) % amount;
-
-  //         for(var i = 0; i < amount; i++)
-  //         {
-  //             var slide = carouselWrapper.querySelectorAll('.slide')[i];
-  //             slide.style.opacity = '1';
-  //             slide.style.transform = 'translateX('+(currTransl[i]+moveOffset+extra)+'px)';
-  //             // slide.style.transform = 'translateX('+(currTransl[i]-moveOffset+(wrapper.offsetWidth*.2))+'px)';
-  //             currTransl[i] = currTransl[i]+moveOffset;
-  //         }
-  //         var outerSlide = carouselWrapper.querySelectorAll('.slide')[outerIndex];
-
-  //         const calculateTranslate = currTransl[outerIndex]-(moveOffset*amount)+extra;
-
-  //         console.log("this is what the PREV outer slide transforms", currTransl[outerIndex]-(moveOffset*amount));
-  //         outerSlide.style.transform = 'translateX('+(calculateTranslate)+'px)';
-  //         outerSlide.style.opacity = '0';
-  //         outerSlide.style.opacity = '0';
-  //         outerSlide.transitionDuration = '0';
-  //         outerSlide.transitionProperty = 'none';
-  //         outerSlide.addEventListener("transitionend", function(){
-  //           console.log('outer slide transition should be over');
-  //           outerSlide.style.opacity = '1';
-  //         })
-  //         currTransl[outerIndex] = currTransl[outerIndex]-moveOffset*(amount);
-  //     }
-  // }
-
 
   const moveToSlide = (newIndex, noTransition = false) => {
     const wrapperTranslateX = `${-(newIndex + cloneCount) * 100}%`
@@ -11702,7 +11644,7 @@ function handleSlide(slide){
         (index === 0) ? images.length : index - 1
         // Otherwise, inc the index, or set it to 0 if we're at the end
         : (index === images.length) ? 0 : index + 1
-      
+
       // If we're about to go all the way around the carousel,
       // move to the cloned element immediately, then transition to the final slide
       if (newIndex === 0 && direction === 'next') moveToSlide(-1, true)
@@ -11710,40 +11652,6 @@ function handleSlide(slide){
       moveToSlide(newIndex)
     }
   }
-
-  // const next = () => {
-  //     // gauge if screen is mobile
-
-  //     if (wrapper.offsetWidth > 999){
-  //       extra = wrapper.offsetWidth*.2;
-  //     }
-  //     else{
-  //       extra = 0;
-  //     }
-
-  //     if(translationComplete === true)
-  //     {
-  //         translationComplete = false;
-  //         var outerIndex = (index) % amount;
-  //         index++;
-  //         for(var i = 0; i < amount; i++)
-  //         {
-  //             console.log("beginning of the for loop" + currTransl[i]);
-  //             var slide = carouselWrapper.querySelectorAll('.slide')[i];
-  //             slide.style.opacity = '1';
-  //             slide.style.transform = 'translateX('+(currTransl[i]-moveOffset+extra)+'px)';
-  //             currTransl[i] = currTransl[i]-moveOffset;
-  //             console.log("end of the for loop" + currTransl[i]);
-  //         }
-  //         var outerSlide = carouselWrapper.querySelectorAll('.slide')[outerIndex];
-  //         console.log("this is what the outer slide transforms", currTransl[outerIndex]+(moveOffset*amount));
-  //         outerSlide.style.transform = 'translateX('+(currTransl[outerIndex]+(moveOffset*amount))+'px)';
-  //         outerSlide.style.opacity = '0';
-  //         outerSlide.transitionDuration = '0';
-  //         currTransl[outerIndex] = currTransl[outerIndex]+moveOffset*(amount);
-  //     }
-  // }
-  // end prev/next fxs
 
   // 5 event listening & binding
   wrapper.addEventListener("click",(e) => {
@@ -11758,47 +11666,8 @@ function handleSlide(slide){
   nextArr.addEventListener("click", () => transition('next'));
   carouselWrapper.addEventListener("transitionend", transitionCompleted, true);
 
-//   $(wrapper).swipe( {
-//     //Generic swipe handler for all directions
-//     swipe:function(event, direction, distance, duration, fingerCount, fingerData) {
-//       alert("You swiped " + direction );
-//       if (direction == "right"){
-//         prev();
-//       }
-//       else if (direction == "right"){
-//         next();
-//       }
-//     }
-//   });
-//
-// //Set some options later
-// $(wrapper).swipe( {fingers:2} );
-
   container.appendChild(wrapper);
   moveToSlide(0, true)
-
-  // // carousel function
-  // // get carousel wrapper element
-  // // const carousel = document.querySelector('.'+uniqueID);
-  // console.log(carouselWrapper);
-
-  // // get node list of slides
-  // // const slides = document.querySelector("."+uniqueID).querySelectorAll('.slide');
-  // const slides = carouselWrapper.querySelectorAll(".slide");
-
-  // // get amount of slides
-  // amount = slides.length;
-
-  // // calcuate the width of the carousel
-  // const slideWidth = slides[0].offsetWidth;
-
-  // // adjust the width of the carouselWrapper
-  // carouselWrapper.style.width = (amount * slideWidth + 3) + 'px';
-
-  // // calculate moveOffset by getting ratio of slide to container
-  // // const containerWidth = document.querySelector('.carousel-container').offsetWidth;
-  // moveOffset = slideWidth;
-  // // console.log({slideWidth, containerWidth, moveOffset});
 
   // prevent multiple click when transition
   slides.map((slide) => {
@@ -11807,10 +11676,36 @@ function handleSlide(slide){
     slide.addEventListener("MSTransitionEnd", transitionCompleted, true);
   })
 
-  // const lastItem = amount - 1;
-  // // add the last item to the start so that translateX(-moveOffset) works (In case the first click is the previous button)
-  // carouselWrapper.insertBefore(carouselWrapper.children[lastItem],carouselWrapper.children[0]);
-  // // end carousel fx
+  // swipe detection
+
+  let touchstartX = 0;
+  let touchstartY = 0;
+  let touchendX = 0;
+  let touchendY = 0;
+
+  const gestureZone = wrapper;
+
+  gestureZone.addEventListener('touchstart', function(event) {
+      touchstartX = event.changedTouches[0].screenX;
+      touchstartY = event.changedTouches[0].screenY;
+  }, false);
+
+  gestureZone.addEventListener('touchend', function(event) {
+      touchendX = event.changedTouches[0].screenX;
+      touchendY = event.changedTouches[0].screenY;
+      handleGesture();
+  }, false);
+
+  function handleGesture() {
+      if (touchendX <= touchstartX) {
+        transition('next');
+      }
+
+      if (touchendX >= touchstartX) {
+        transition('prev');
+      }
+  }
+
 
 }
 
@@ -11818,7 +11713,6 @@ function handleSlide(slide){
 window.onload = function(){
 
     // api call
-
     Prismic.getApi(apiEndpoint).then(function(api) {
       return api.query(
         Prismic.Predicates.at('document.type', 'slider')
@@ -11826,9 +11720,6 @@ window.onload = function(){
       }).then(function(response) {
         const sliders = response.results;
         sliders.forEach((slide)=>{handleSlide(slide)});
-        // window.addEventListener('resize', function(){
-        //   sliders.forEach((slide)=>{handleSlide(slide)});
-        // });
       }, function(err) {
       console.log("Something went wrong: ", err);
     });

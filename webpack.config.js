@@ -2,7 +2,6 @@ const path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  // entry: './src/js/index.js',
   entry: {
     index: './src/js/index.js',
     portfolio: './src/js/portfolio.js'
@@ -11,10 +10,6 @@ module.exports = {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist')
   },
-  // output: {
-  //   filename: 'bundle.js',
-  //   path: path.resolve(__dirname, 'dist')
-  // },
   module: {
     rules: [
             {
