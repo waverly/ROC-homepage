@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -10931,17 +10931,14 @@ module.exports = __webpack_amd_options__;
 
 /***/ }),
 /* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // import './../css/portfolio.scss';
 var Prismic = __webpack_require__(0);
 var apiEndpoint = "https://rideorcry.prismic.io/api/v2";
 var $ = __webpack_require__(3);
-var swipe = __webpack_require__(10);
+var swipe = __webpack_require__(7);
 
 const container = document.querySelector('.container');
 
@@ -11160,7 +11157,7 @@ window.onload = function(){
 
 
 /***/ }),
-/* 10 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
