@@ -22,7 +22,8 @@
   overflow: hidden;
   img{
     will-change: transform;
-
+  }
+  .img-wrapper{
     &:hover{
       z-index: $z-feed;
     }
