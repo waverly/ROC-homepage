@@ -289,8 +289,13 @@ table {
   overflow: hidden; }
   .thumb-wrap img {
     will-change: transform; }
-  .thumb-wrap .img-wrapper:hover {
-    z-index: 7; }
+  .thumb-wrap .img-wrapper {
+    width: 10%;
+    height: 10%;
+    top: 10%;
+    left: 10%; }
+    .thumb-wrap .img-wrapper:hover {
+      z-index: 7; }
 
 .reel-wrap {
   position: relative;

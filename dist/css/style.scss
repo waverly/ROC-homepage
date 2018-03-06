@@ -1,40 +1,44 @@
-@import 'reset';
+@import "reset";
 // @import 'variables';
-@import 'general';
+@import "general";
 // @import 'mixins';
 
-.fa-volume-off{
+.fa-volume-off {
   display: none;
 }
 
-.img-wrapper{
-  img{
+.img-wrapper {
+  img {
     max-width: 100%;
   }
 }
 
-.thumb-wrap{
+.thumb-wrap {
   margin-top: $nav-height;
   min-height: 150vh;
 
   width: 100vw;
   position: relative;
   overflow: hidden;
-  img{
+  img {
     will-change: transform;
   }
-  .img-wrapper{
-    &:hover{
+  .img-wrapper {
+    width: 10%;
+    height: 10%;
+    top: 10%;
+    left: 10%;
+    &:hover {
       z-index: $z-feed;
     }
   }
 }
 
-.reel-wrap{
+.reel-wrap {
   position: relative;
   width: 100vw;
 
-  .mute-video{
+  .mute-video {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -42,39 +46,39 @@
     height: 40px;
     z-index: 10;
 
-    .fa-volume-up{
+    .fa-volume-up {
       width: 100%;
       height: 100%;
       color: white;
     }
 
-    .fa-volume-off{
+    .fa-volume-off {
       width: 100%;
       height: 100%;
       color: white;
     }
   }
 
-  video{
+  video {
     width: 100%;
   }
 }
 
-.bio-wrap{
+.bio-wrap {
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: lime;
   min-height: 100vh;
 
-  h1{
+  h1 {
     width: 50%;
     font-size: 2em;
     line-height: 2em;
   }
 }
 
-.collage-wrap{
+.collage-wrap {
   height: 100vh;
   width: 100vw;
   position: relative;
@@ -83,13 +87,12 @@
   align-items: center;
 }
 
-@media screen and (max-width: 1000px){
-
-  .thumb-wrap{
+@media screen and (max-width: 1000px) {
+  .thumb-wrap {
     margin-top: 0;
     min-height: 150vh;
     width: 100vw;
-    height: auto!important;
+    height: auto !important;
     position: relative;
     overflow: hidden;
     display: flex;
@@ -97,34 +100,31 @@
     align-items: center;
     padding: 10em 0;
 
-    .img-wrapper{
-      position: relative!important;
-      left: 0!important;
-      right: 0!important;
-      top: auto!important;
-      width: 80%!important;
-      transform: none!important;
-      will-change: none!important;
+    .img-wrapper {
+      position: relative !important;
+      left: 0 !important;
+      right: 0 !important;
+      top: auto !important;
+      width: 80% !important;
+      transform: none !important;
+      will-change: none !important;
 
-      img{
-        width: 100%!important;
-        position: relative!important;
-        top: auto!important;
-        left: auto!important;
-        transform: none!important;
-        will-change: none!important;
+      img {
+        width: 100% !important;
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        transform: none !important;
+        will-change: none !important;
 
-        &:hover{
+        &:hover {
           z-index: $z-feed;
         }
       }
     }
 
-    a{
+    a {
       text-align: center;
     }
-
-
   }
-
 }
