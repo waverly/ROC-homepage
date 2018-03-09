@@ -6,8 +6,6 @@ var swipe = require("jquery-touchswipe");
 const container = document.querySelector(".container");
 
 function handleSlide(slide) {
-  console.log("inside of handle slide");
-
   // extract data
   const title = slide.data.title["0"].text;
   const bgColor = slide.data["bg-color"];

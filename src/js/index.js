@@ -65,11 +65,14 @@ window.onload = function() {
       const scrollSpeed = thumbnail.data.speed;
 
       const linkWrap = document.createElement("a");
+
+      // if there is a link, add to A tag, otherwise don't add HREF value and disable pointer cursor
       if (link) {
         linkWrap.setAttribute("href", link);
         linkWrap.setAttribute("target", "_blank");
-      } else {
-        linkWrap.setAttribute("href", "#");
+      }
+      if (!link) {
+        linkWrap.style.cursor = "default";
       }
 
       const newEl = document.createElement("div");
@@ -85,7 +88,6 @@ window.onload = function() {
 
       linkWrap.appendChild(img);
       newEl.appendChild(linkWrap);
-
       thumbWrap.appendChild(newEl);
     });
 
