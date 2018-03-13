@@ -47,8 +47,6 @@ table {
 
 /*....................................SCSS VARIABLES..................................*/
 /*....................................................................................*/
-/*....................................SCSS VARIABLES..................................*/
-/*....................................................................................*/
 /*.................................................................................*/
 /*$break-large-desktop: 2500px;*/
 /*$break-infinite: 500000px;*/
@@ -133,8 +131,8 @@ a {
   font-family: helvetica, sans-serif;
   letter-spacing: 1px;
   /*  @if $media == large-desktop {
-      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
-    }*/ }
+    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+  }*/ }
   @media only screen and (min-width: 0px) and (max-width: 767px) {
     a {
       font-size: 12px;
@@ -146,8 +144,8 @@ h3 a {
   font-family: helvetica, sans-serif;
   letter-spacing: 1px;
   /*  @if $media == large-desktop {
-      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
-    }*/
+    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+  }*/
   color: #e2e2e2; }
   @media only screen and (min-width: 0px) and (max-width: 767px) {
     h3 a {
@@ -160,8 +158,8 @@ h4 a {
   font-family: helvetica, sans-serif;
   letter-spacing: 1px;
   /*  @if $media == large-desktop {
-      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
-    }*/ }
+    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+  }*/ }
   @media only screen and (min-width: 0px) and (max-width: 767px) {
     h4 a {
       font-size: 16px;
@@ -177,14 +175,14 @@ h4 a {
   .a-hover:hover {
     color: #F5F5F5;
     /*  @if $media == large-desktop {
-        @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
-      }*/
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/
     /*  @if $media == large-desktop {
-        @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
-      }*/
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/
     /*  @if $media == large-desktop {
-        @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
-      }*/ }
+      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+    }*/ }
     @media only screen and (min-width: 0px) and (max-device-width: 767px) {
       .a-hover:hover {
         color: #000000 !important; } }
@@ -201,8 +199,8 @@ p {
   font-family: helvetica, sans-serif;
   letter-spacing: 1px;
   /*  @if $media == large-desktop {
-      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
-    }*/ }
+    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+  }*/ }
   @media only screen and (min-width: 0px) and (max-width: 767px) {
     p {
       font-size: 12px;
@@ -214,8 +212,8 @@ h1 {
   font-family: helvetica, sans-serif;
   letter-spacing: 2px;
   /*  @if $media == large-desktop {
-      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
-    }*/ }
+    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+  }*/ }
   @media only screen and (min-width: 0px) and (max-width: 767px) {
     h1 {
       font-size: 25px;
@@ -227,8 +225,8 @@ h2 {
   font-family: helvetica, sans-serif;
   letter-spacing: 0px;
   /*  @if $media == large-desktop {
-      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
-    }*/ }
+    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+  }*/ }
   @media only screen and (min-width: 0px) and (max-width: 767px) {
     h2 {
       font-size: 20px;
@@ -240,8 +238,8 @@ h3 {
   font-family: helvetica, sans-serif;
   letter-spacing: 1px;
   /*  @if $media == large-desktop {
-      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
-    }*/ }
+    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+  }*/ }
   @media only screen and (min-width: 0px) and (max-width: 767px) {
     h3 {
       font-size: 18px;
@@ -253,8 +251,8 @@ h4 {
   font-family: helvetica, sans-serif;
   letter-spacing: 1px;
   /*  @if $media == large-desktop {
-      @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
-    }*/ }
+    @media only screen and (min-width: $break-large-desktop + 1) and (max-width: $break-infinite) { @content; }
+  }*/ }
   @media only screen and (min-width: 0px) and (max-width: 767px) {
     h4 {
       font-size: 16px;
@@ -277,14 +275,8 @@ table {
   table tr td {
     vertical-align: middle; }
 
-/*....................................SCSS VARIABLES..................................*/
-/*....................................................................................*/
-/*.................................................................................*/
-/*$break-large-desktop: 2500px;*/
-/*$break-infinite: 500000px;*/
-/*....................................SCSS MIXINS..................................*/
 header {
-  opacity: .8; }
+  opacity: 0.8; }
 
 .prev-arrow {
   position: absolute;
@@ -311,10 +303,10 @@ header {
     color: white; }
 
 .animate {
-  -webkit-transition-duration: .5s;
-  -moz-transition-duration: .5s;
-  -o-transition-duration: .5s;
-  transition-duration: .5s;
+  -webkit-transition-duration: 0.5s;
+  -moz-transition-duration: 0.5s;
+  -o-transition-duration: 0.5s;
+  transition-duration: 0.5s;
   -webkit-transition-property: -webkit-transform;
   -moz-transition-property: -moz-transform;
   -o-transition-property: -o-transform;
@@ -356,7 +348,11 @@ header {
       -o-transition-property: -o-transform;
       transition-property: transform; }
     .container .carousel-container .text-slide {
-      flex-direction: column; }
+      flex-direction: column;
+      padding: 3em; }
+      .container .carousel-container .text-slide p {
+        max-width: 100%;
+        white-space: initial; }
     .container .carousel-container .slide {
       position: relative;
       display: inline-flex;
@@ -365,14 +361,28 @@ header {
       height: 100%;
       justify-content: center;
       align-items: center;
-      -webkit-transition-duration: .5s;
-      -moz-transition-duration: .5s;
-      -o-transition-duration: .5s;
-      transition-duration: .5s;
+      -webkit-transition-duration: 0.5s;
+      -moz-transition-duration: 0.5s;
+      -o-transition-duration: 0.5s;
+      transition-duration: 0.5s;
       -webkit-transition-property: -webkit-transform;
       -moz-transition-property: -moz-transform;
       -o-transition-property: -o-transform;
       transition-property: transform; }
+      .container .carousel-container .slide .videoContainer {
+        width: 60%; }
+      .container .carousel-container .slide .videoWrap {
+        position: relative;
+        padding-bottom: 56.25%;
+        padding-top: 30px;
+        height: 0;
+        overflow: hidden; }
+      .container .carousel-container .slide .videoWrap iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%; }
       .container .carousel-container .slide img {
         max-height: 80%;
         max-width: 80%;

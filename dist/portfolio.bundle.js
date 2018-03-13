@@ -10942,6 +10942,7 @@ var swipe = __webpack_require__(7);
 const container = document.querySelector(".container");
 
 function handleSlide(slide) {
+  // console.log(slide.data);
   // extract data
   const title = slide.data.title["0"].text;
   const bgColor = slide.data["bg-color"];
@@ -10949,11 +10950,17 @@ function handleSlide(slide) {
   const projectIntro = slide.data["project-intro"]["0"].text;
   const link = slide.data["visit-link"].url;
   const images = slide.data.body["0"].items;
+  const body = slide.data.body;
+  const textColor = slide.data.textcolor;
+  const linkColor = slide.data.linkcolor;
+  const backgroundImage = slide.data.bgimage.url;
+
+  console.log(title, { images }, { body });
   // end extract data
 
   // carousel declarations
   let index = 0;
-  let amount = images.length;
+  let amount = body.length;
   let currTransl = [];
   let translationComplete = true;
   let moveOffset = 0;
@@ -10995,6 +11002,7 @@ function handleSlide(slide) {
 
   // inner div wrapper
   const innerWrapper = document.createElement("div");
+
   innerWrapper.classList.add("inner-wrap");
   wrapper.appendChild(innerWrapper);
 
@@ -11003,15 +11011,31 @@ function handleSlide(slide) {
   carouselWrapper.classList.add("carousel-wrap");
   innerWrapper.appendChild(carouselWrapper);
 
+  carouselWrapper.style.backgroundColor = "red!important";
+  if (backgroundImage) {
+    innerWrapper.style.backgroundImage = `url(${backgroundImage})`;
+    carouselWrapper.style.backgroundRepeat = "repeat-x";
+  }
+
   // text slide
   const textSlide = document.createElement("div");
   textSlide.classList.add("slide", "text-slide");
+  if (textColor) {
+    textSlide.style.color = textColor;
+  }
   const client = document.createElement("h3");
   client.innerHTML = clientName;
   const intro = document.createElement("p");
   intro.innerHTML = projectIntro;
+  if (textColor) {
+    intro.style.color = textColor;
+  }
+
   const visit = document.createElement("a");
   visit.setAttribute("href", link);
+  if (linkColor) {
+    visit.style.color = linkColor;
+  }
   visit.innerHTML = "visit";
   textSlide.appendChild(client);
   textSlide.appendChild(intro);
@@ -11020,15 +11044,37 @@ function handleSlide(slide) {
   // Add the text slide to the slides array
   slides.push(textSlide);
 
-  images.map((image, index) => {
-    const wrapper = document.createElement("div");
-    wrapper.classList.add("slide", "img-slide");
-    const src = image.thumbnail.url;
-    const img = document.createElement("img");
-    img.setAttribute("src", src);
-    wrapper.appendChild(img);
-    // carouselWrapper.appendChild(wrapper);
-    slides.push(wrapper);
+  body.map((b, index) => {
+    // console.log(image.type);
+    // console.log(b);
+    if (b.slice_type === "video") {
+      const wrapper = document.createElement("div");
+      wrapper.classList.add("slide", "img-slide");
+      const src = b.primary.link.url;
+      const videoContainer = document.createElement("div");
+      videoContainer.classList.add("videoContainer");
+      const videoWrap = document.createElement("div");
+      videoWrap.classList.add("videoWrap");
+      const video = document.createElement("iframe");
+
+      video.setAttribute("src", src);
+      videoWrap.appendChild(video);
+      videoContainer.appendChild(videoWrap);
+
+      wrapper.appendChild(videoContainer);
+      carouselWrapper.appendChild(wrapper);
+      slides.push(wrapper);
+    } else if (b.slice_type === "image") {
+      // console.log(b);
+      const wrapper = document.createElement("div");
+      wrapper.classList.add("slide", "img-slide");
+      const src = b.primary.thumbnail.url;
+      const img = document.createElement("img");
+      img.setAttribute("src", src);
+      wrapper.appendChild(img);
+      carouselWrapper.appendChild(wrapper);
+      slides.push(wrapper);
+    }
   });
 
   slides.map(slide => carouselWrapper.appendChild(slide));
@@ -11071,15 +11117,15 @@ function handleSlide(slide) {
         direction === "prev"
           ? // If the direction is `prev`, reduce the current index by 1,
             // or, if it's already at 0, set it to the end
-            index === 0 ? images.length : index - 1
+            index === 0 ? body.length : index - 1
           : // Otherwise, inc the index, or set it to 0 if we're at the end
-            index === images.length ? 0 : index + 1;
+            index === body.length ? 0 : index + 1;
 
       // If we're about to go all the way around the carousel,
       // move to the cloned element immediately, then transition to the final slide
       if (newIndex === 0 && direction === "next") moveToSlide(-1, true);
-      if (newIndex === images.length && direction === "prev")
-        moveToSlide(images.length + 1, true);
+      if (newIndex === body.length && direction === "prev")
+        moveToSlide(body.length + 1, true);
       moveToSlide(newIndex);
     }
   };
@@ -11155,6 +11201,7 @@ window.onload = function() {
     .then(
       function(response) {
         const sliders = response.results;
+
         sliders.forEach(slide => {
           handleSlide(slide);
         });
