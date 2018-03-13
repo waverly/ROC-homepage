@@ -62,9 +62,19 @@ window.onload = function() {
       const left = thumbnail.data.left;
       const top = thumbnail.data.top;
       const width = thumbnail.data.width;
-      const scrollSpeed = thumbnail.data.speed;
+      let scrollSpeed = thumbnail.data.speed;
+      const hideMobile = thumbnail.data.hide;
+      const zIndex = thumbnail.data["z-index"];
+
+      if (!scrollSpeed) {
+        scrollSpeed = 1;
+      }
+
+      console.log(thumbnail);
 
       const linkWrap = document.createElement("a");
+
+      // if the image is meant to be hidden on mobile, add a class
 
       // if there is a link, add to A tag, otherwise don't add HREF value and disable pointer cursor
       if (link) {
@@ -82,6 +92,14 @@ window.onload = function() {
       newEl.style.width = width + "%";
       newEl.style.top = top + "%";
       newEl.style.left = left + "%";
+
+      if (hideMobile === "true") {
+        newEl.classList.add("hide-mobile");
+      }
+
+      if (zIndex) {
+        newEl.style.zIndex = zIndex;
+      }
 
       const img = document.createElement("img");
       img.setAttribute("src", src);
