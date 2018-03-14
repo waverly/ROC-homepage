@@ -41,7 +41,7 @@ window.onload = function() {
 
   Prismic.getApi(apiEndpoint)
     .then(function(api) {
-      return api.query(Prismic.Predicates.at("document.type", "thumbnail")); // An empty query will return all the documents
+      return api.query(Prismic.Predicates.at("document.type", "thumbnail"));
     })
     .then(
       function(response) {
@@ -70,7 +70,7 @@ window.onload = function() {
         scrollSpeed = 1;
       }
 
-      console.log(thumbnail);
+      // console.log(thumbnail);
 
       const linkWrap = document.createElement("a");
 

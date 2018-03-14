@@ -11196,12 +11196,14 @@ window.onload = function() {
   // api call
   Prismic.getApi(apiEndpoint)
     .then(function(api) {
-      return api.query(Prismic.Predicates.at("document.type", "slider"));
+      return api.query(Prismic.Predicates.at("document.type", "slider"), {
+        orderings: "[my.slider.order]"
+      });
     })
     .then(
       function(response) {
         const sliders = response.results;
-
+        console.log(sliders);
         sliders.forEach(slide => {
           handleSlide(slide);
         });
