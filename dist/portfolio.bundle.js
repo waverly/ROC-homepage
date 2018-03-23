@@ -10945,6 +10945,7 @@ function handleSlide(slide) {
   // console.log(slide.data);
   // extract data
   const title = slide.data.title["0"].text;
+  const logo = slide.data.logo.url;
   const bgColor = slide.data["bg-color"];
   const clientName = slide.data["client-name"]["0"].text;
   const projectIntro = slide.data["project-intro"]["0"].text;
@@ -11023,8 +11024,21 @@ function handleSlide(slide) {
   if (textColor) {
     textSlide.style.color = textColor;
   }
+
+  // refactor to include logo options
   const client = document.createElement("h3");
-  client.innerHTML = clientName;
+
+  if (slide.data.logo.url) {
+    alert(clientName);
+    const client = document.createElement("img");
+    client.setAttribute("src", logo);
+    textSlide.appendChild(client);
+  } else {
+    const client = document.createElement("h3");
+    client.innerHTML = clientName;
+    textSlide.appendChild(client);
+  }
+
   const intro = document.createElement("p");
   intro.innerHTML = projectIntro;
   if (textColor) {
@@ -11037,7 +11051,7 @@ function handleSlide(slide) {
     visit.style.color = linkColor;
   }
   visit.innerHTML = "visit";
-  textSlide.appendChild(client);
+
   textSlide.appendChild(intro);
   textSlide.appendChild(visit);
 
@@ -11056,7 +11070,6 @@ function handleSlide(slide) {
       const videoWrap = document.createElement("div");
       videoWrap.classList.add("videoWrap");
       const video = document.createElement("iframe");
-
       video.setAttribute("src", src);
       videoWrap.appendChild(video);
       videoContainer.appendChild(videoWrap);
