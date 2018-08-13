@@ -1,0 +1,127 @@
+@keyframes marquee {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes marquee2 {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-200%);
+  }
+}
+
+.index {
+  padding-bottom: 100px;
+  canvas {
+    width: 100vw !important;
+    height: 100vh !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 0;
+  }
+  .text-wrap {
+    position: relative;
+    z-index: 1;
+    mix-blend-mode: difference;
+
+    #header {
+      margin-bottom: $spacing-x1;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    p,
+    a {
+      color: white;
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+  }
+  .text-wrap.loaded {
+    h1,
+    h2,
+    h3,
+    h4,
+    p,
+    a {
+      opacity: 1;
+      transition: opacity 0.5s;
+    }
+  }
+  img {
+    min-width: 100vw;
+    min-height: 100vh;
+    position: absolute;
+    top: -50%;
+    left: -50%;
+  }
+  .marquee {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 75px;
+    background: black;
+    color: white;
+    min-width: 100%;
+    width: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 2;
+    overflow: hidden;
+    white-space: nowrap;
+
+    .div1 {
+      display: inline-block;
+      animation: marquee 10s linear infinite;
+    }
+    .div2 {
+      display: inline-block;
+      animation: marquee2 10s linear infinite;
+      animation-delay: 5s;
+    }
+
+    h3 {
+      display: inline;
+      margin: 0 2em;
+    }
+
+    a {
+      font-family: $sans;
+      color: white;
+      text-decoration: none;
+      h3 {
+        display: inline;
+        margin: 0 2em;
+        font-family: $sans;
+      }
+    }
+  }
+  /* .......... */
+  #read-more {
+    cursor: pointer;
+  }
+  .expanded-text {
+    overflow: hidden;
+    transition: height 0.3s ease-out;
+    height: 0;
+  }
+  // .expanded-text.display {
+  //   display: block;
+  // }
+}
+
+@media all and (max-width: 768px),
+  all and (max-width: 830px) and (orientation: landscape) {
+  .index {
+  }
+}
