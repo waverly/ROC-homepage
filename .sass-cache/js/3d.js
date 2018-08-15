@@ -1,122 +1,9 @@
 // dependencies
-var Prismic = require("prismic-javascript");
-var PrismicDOM = require("prismic-dom");
 // var Noise = require("noisejs");
 // import * as Noise from "noisejs";
 var THREE = require("three");
 var OrbitControls = require("three-orbit-controls")(THREE);
 const dat = require("dat.gui");
-
-var apiEndpoint = "https://laurynsiegel.prismic.io/api/v2";
-
-var linkResolver = function(doc) {
-  return null;
-};
-
-let results;
-let header;
-let expandabletext;
-let social;
-let expTextHtml;
-
-Prismic.api(apiEndpoint)
-  .then(function(api) {
-    return api.query(""); // An empty query will return all the documents
-  })
-  .then(
-    function(response) {
-      // console.log("Documents: ", response.results);
-
-      results = response.results;
-      header = results[0].data.header[0].text;
-      let { expandabletext, social } = results[0].data;
-
-      expTextHtml = PrismicDOM.RichText.asHtml(expandabletext, linkResolver);
-
-      // replace innerHTML in header and expandableText
-      document.getElementById("header").innerHTML = header;
-      document.getElementById("expandedText").innerHTML = expTextHtml;
-
-      // loop through social links and add all to span
-
-      // when span contians the same # of child nodes as lenght of socials, clone span nodes
-
-      // append both to .marquee-inner
-
-      const span = document.createElement("span");
-      const hyphen = document.createElement("h1");
-      hyphen.innerHTML = "-";
-      const makeClone = () => hyphen.cloneNode(true);
-
-      // social.map((s, index, array) => {
-      //   const link = s.link.url;
-      //   const title = s.title[0].text;
-      //   const a = document.createElement("a");
-      //   const h1 = document.createElement("h1");
-      //   h1.innerHTML = `${title}`;
-      //   a.setAttribute("href", link);
-      //   a.setAttribute("target", "_blank");
-      //   a.appendChild(h1);
-      //
-      //   span.appendChild(a);
-      //   span.appendChild(makeClone());
-      //   console.log(s, index);
-      //
-      //   // span.appendChild(a);
-      //
-      //   if (span.childElementCount === social.length) {
-      //     const spanClone = span.cloneNode(true);
-      //     document.querySelector(".marquee-inner").appendChild(span);
-      //     document.querySelector(".marquee-inner").appendChild(spanClone);
-      //     console.log(span, spanClone);
-      //   }
-      // });
-
-      document.querySelector(".text-wrap").classList.add("loaded");
-    },
-    function(err) {
-      console.log("Something went wrong: ", err);
-    }
-  );
-
-const collapseSection = element => {
-  const sectionHeight = element.scrollHeight;
-
-  const elementTransition = element.style.transition;
-  element.style.transition = "";
-
-  requestAnimationFrame(function() {
-    element.style.height = sectionHeight + "px";
-    element.style.transition = elementTransition;
-
-    // on the next frame (as soon as the previous style change has taken effect),
-    // have the element transition to height: 0
-    requestAnimationFrame(function() {
-      element.style.height = `0px`;
-    });
-  });
-
-  // mark the section as "currently collapsed"
-  element.setAttribute("data-collapsed", "true");
-};
-
-function expandSection(element) {
-  const sectionHeight = element.scrollHeight;
-
-  element.style.height = `${sectionHeight}px`;
-
-  // when the next css transition finishes (which should be the one we just triggered)
-  element.addEventListener("transitionend", e => {
-    // remove this event listener so it only gets triggered once
-    element.removeEventListener("transitionend", arguments.callee);
-
-    // remove "height" from the element's inline styles, so it can return to its initial value
-    // element.style.height = null;
-  });
-
-  // mark the section as "currently not collapsed"
-  element.setAttribute("data-collapsed", "false");
-}
 
 // STLL LOADER
 
@@ -322,19 +209,7 @@ THREE.STLLoader.prototype = {
 // END STLL LOADER
 
 window.onload = e => {
-  const readMore = document.querySelector("#read-more");
-  const section = document.querySelector(".expanded-text");
-
-  readMore.addEventListener("click", () => {
-    const isCollapsed = section.getAttribute("data-collapsed") === "true";
-
-    if (isCollapsed) {
-      expandSection(section);
-      section.setAttribute("data-collapsed", "false");
-    } else {
-      collapseSection(section);
-    }
-  });
+  console.log("inside three script");
   //  end readMore section
 
   // start threeJS
@@ -387,17 +262,14 @@ window.onload = e => {
 
   var renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
-  // sets background color
-  renderer.setClearColor(0x000000, 0.8);
+  renderer.setClearColor(0x114457, 0.8);
   document.querySelector(".container").appendChild(renderer.domElement);
 
   var distance = 400;
 
   var FOV = 2 * Math.atan(window.innerHeight / (2 * distance)) * 90 / Math.PI;
-  console.log(FOV);
 
   var camera = new THREE.PerspectiveCamera(
-    // FOV,
     FOV,
     window.innerWidth / window.innerHeight,
     1,
@@ -414,13 +286,12 @@ window.onload = e => {
 
   camera.up.set(0, 0, 1);
   camera.position.set(width / 2, -height / 2, 1000);
-  // camera.position.set(0, 0, 1000);
-  // camera.lookAt(new THREE.Vector3(centre[0], centre[1], centre[2]));
-  camera.lookAt(scene.position);
+  camera.lookAt(new THREE.Vector3(centre[0], centre[1], centre[2]));
 
   scene.add(camera);
   window.addEventListener("resize", onWindowResize);
   function onWindowResize() {
+    console.log("in window resize fx");
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -458,36 +329,31 @@ window.onload = e => {
   var loader = new THREE.STLLoader();
   //Load dancer
   loader.load(
-    // "https://res.cloudinary.com/al-ro/raw/upload/v1531776249/ballerina_1_mu2pmx.stl",
-    "https://res.cloudinary.com/dzlun7snb/raw/upload/v1534113088/glasses.stl",
+    "https://res.cloudinary.com/al-ro/raw/upload/v1531776249/ballerina_1_mu2pmx.stl",
+    // "../assets/glasses.fbx",
     function(geometry) {
+      console.log("inside geometry");
       var mesh = new THREE.Mesh(geometry, material_d);
 
       mesh.scale.set(depth / 22, depth / 22, depth / 22);
-      mesh.position.set(-250, -50, -depth / 3 + 475);
-      // mesh.rotation.x = -40 * Math.PI / 180;
-      // mesh.rotation.y = -20 * Math.PI / 180;
-
-      // mesh.rotateX(-70 * Math.PI / 180);
-      // mesh.rotateY(-20 * Math.PI / 180);
-      // mesh.rotateZ(30 * Math.PI / 180);
+      mesh.position.set(-20, -30, -depth / 3 + 75);
 
       scene.add(mesh);
     }
   );
 
   //Load base
-  // loader.load(
-  //   "https://res.cloudinary.com/al-ro/raw/upload/v1531777915/base_uluxjn.stl",
-  //   function(geometry) {
-  //     var mesh = new THREE.Mesh(geometry, material_d);
-  //
-  //     mesh.scale.set(depth / 2, depth / 2, depth / 2);
-  //     mesh.position.set(-725, -725, -1050);
-  //
-  //     scene.add(mesh);
-  //   }
-  // );
+  loader.load(
+    "https://res.cloudinary.com/al-ro/raw/upload/v1531777915/base_uluxjn.stl",
+    function(geometry) {
+      var mesh = new THREE.Mesh(geometry, material_d);
+
+      mesh.scale.set(depth / 2, depth / 2, depth / 2);
+      mesh.position.set(-725, -725, -1050);
+
+      scene.add(mesh);
+    }
+  );
 
   //Define hexagon shape for flakes
   var geom = new THREE.Geometry();

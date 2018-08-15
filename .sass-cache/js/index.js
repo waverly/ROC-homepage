@@ -33,44 +33,31 @@ Prismic.api(apiEndpoint)
 
       expTextHtml = PrismicDOM.RichText.asHtml(expandabletext, linkResolver);
 
+      console.log({ header, expandabletext, social });
+
       // replace innerHTML in header and expandableText
       document.getElementById("header").innerHTML = header;
       document.getElementById("expandedText").innerHTML = expTextHtml;
 
-      // loop through social links and add all to span
+      // loop through social links and append to marquee
+      social.map(s => {
+        const link = s.link.url;
+        const title = s.title[0].text;
+        const a = document.createElement("a");
+        const h3 = document.createElement("h3");
+        h3.innerHTML = title;
+        a.setAttribute("href", link);
+        a.appendChild(h3);
 
-      // when span contians the same # of child nodes as lenght of socials, clone span nodes
-
-      // append both to .marquee-inner
-
-      const span = document.createElement("span");
-      const hyphen = document.createElement("h1");
-      hyphen.innerHTML = "-";
-      const makeClone = () => hyphen.cloneNode(true);
-
-      // social.map((s, index, array) => {
-      //   const link = s.link.url;
-      //   const title = s.title[0].text;
-      //   const a = document.createElement("a");
-      //   const h1 = document.createElement("h1");
-      //   h1.innerHTML = `${title}`;
-      //   a.setAttribute("href", link);
-      //   a.setAttribute("target", "_blank");
-      //   a.appendChild(h1);
-      //
-      //   span.appendChild(a);
-      //   span.appendChild(makeClone());
-      //   console.log(s, index);
-      //
-      //   // span.appendChild(a);
-      //
-      //   if (span.childElementCount === social.length) {
-      //     const spanClone = span.cloneNode(true);
-      //     document.querySelector(".marquee-inner").appendChild(span);
-      //     document.querySelector(".marquee-inner").appendChild(spanClone);
-      //     console.log(span, spanClone);
-      //   }
-      // });
+        // clone node
+        const cloneA = a.cloneNode();
+        const cloneH3 = h3.cloneNode();
+        cloneH3.innerHTML = title;
+        cloneA.appendChild(cloneH3);
+        console.log(a, h3, title);
+        document.querySelector("#marquee-socials .div1").appendChild(a);
+        document.querySelector("#marquee-socials .div2").appendChild(cloneA);
+      });
 
       document.querySelector(".text-wrap").classList.add("loaded");
     },
@@ -80,6 +67,7 @@ Prismic.api(apiEndpoint)
   );
 
 const collapseSection = element => {
+  console.log("now i am collapsing");
   const sectionHeight = element.scrollHeight;
 
   const elementTransition = element.style.transition;
@@ -101,6 +89,7 @@ const collapseSection = element => {
 };
 
 function expandSection(element) {
+  console.log("now i am expanding");
   const sectionHeight = element.scrollHeight;
 
   element.style.height = `${sectionHeight}px`;
@@ -322,6 +311,8 @@ THREE.STLLoader.prototype = {
 // END STLL LOADER
 
 window.onload = e => {
+  console.log("hello world");
+
   const readMore = document.querySelector("#read-more");
   const section = document.querySelector(".expanded-text");
 
@@ -394,10 +385,8 @@ window.onload = e => {
   var distance = 400;
 
   var FOV = 2 * Math.atan(window.innerHeight / (2 * distance)) * 90 / Math.PI;
-  console.log(FOV);
 
   var camera = new THREE.PerspectiveCamera(
-    // FOV,
     FOV,
     window.innerWidth / window.innerHeight,
     1,
@@ -414,13 +403,12 @@ window.onload = e => {
 
   camera.up.set(0, 0, 1);
   camera.position.set(width / 2, -height / 2, 1000);
-  // camera.position.set(0, 0, 1000);
-  // camera.lookAt(new THREE.Vector3(centre[0], centre[1], centre[2]));
-  camera.lookAt(scene.position);
+  camera.lookAt(new THREE.Vector3(centre[0], centre[1], centre[2]));
 
   scene.add(camera);
   window.addEventListener("resize", onWindowResize);
   function onWindowResize() {
+    console.log("in window resize fx");
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -461,33 +449,28 @@ window.onload = e => {
     // "https://res.cloudinary.com/al-ro/raw/upload/v1531776249/ballerina_1_mu2pmx.stl",
     "https://res.cloudinary.com/dzlun7snb/raw/upload/v1534113088/glasses.stl",
     function(geometry) {
+      console.log("inside geometry");
       var mesh = new THREE.Mesh(geometry, material_d);
 
       mesh.scale.set(depth / 22, depth / 22, depth / 22);
-      mesh.position.set(-250, -50, -depth / 3 + 475);
-      // mesh.rotation.x = -40 * Math.PI / 180;
-      // mesh.rotation.y = -20 * Math.PI / 180;
-
-      // mesh.rotateX(-70 * Math.PI / 180);
-      // mesh.rotateY(-20 * Math.PI / 180);
-      // mesh.rotateZ(30 * Math.PI / 180);
+      mesh.position.set(-20, -30, -depth / 3 + 475);
 
       scene.add(mesh);
     }
   );
 
   //Load base
-  // loader.load(
-  //   "https://res.cloudinary.com/al-ro/raw/upload/v1531777915/base_uluxjn.stl",
-  //   function(geometry) {
-  //     var mesh = new THREE.Mesh(geometry, material_d);
-  //
-  //     mesh.scale.set(depth / 2, depth / 2, depth / 2);
-  //     mesh.position.set(-725, -725, -1050);
-  //
-  //     scene.add(mesh);
-  //   }
-  // );
+  loader.load(
+    "https://res.cloudinary.com/al-ro/raw/upload/v1531777915/base_uluxjn.stl",
+    function(geometry) {
+      var mesh = new THREE.Mesh(geometry, material_d);
+
+      mesh.scale.set(depth / 2, depth / 2, depth / 2);
+      mesh.position.set(-725, -725, -1050);
+
+      scene.add(mesh);
+    }
+  );
 
   //Define hexagon shape for flakes
   var geom = new THREE.Geometry();

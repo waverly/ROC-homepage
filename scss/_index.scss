@@ -1,18 +1,9 @@
 @keyframes marquee {
-  from {
-    transform: translateX(100%);
+  0% {
+    left: 0;
   }
-  to {
-    transform: translateX(-100%);
-  }
-}
-
-@keyframes marquee2 {
-  from {
-    transform: translateX(0%);
-  }
-  to {
-    transform: translateX(-200%);
+  100% {
+    left: -100%;
   }
 }
 
@@ -68,11 +59,14 @@
     position: fixed;
     bottom: 0;
     left: 0;
-    height: 75px;
-    background: black;
-    color: white;
-    min-width: 100%;
-    width: auto;
+    right: 0;
+    height: 100px;
+    width: 100vw;
+    background: white;
+    color: black;
+    -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -80,17 +74,94 @@
     overflow: hidden;
     white-space: nowrap;
 
-    .div1 {
-      display: inline-block;
-      animation: marquee 10s linear infinite;
-    }
-    .div2 {
-      display: inline-block;
-      animation: marquee2 10s linear infinite;
-      animation-delay: 5s;
+    &:hover {
+      background: black;
+      color: white;
+      -webkit-text-fill-color: black; /* Will override color (regardless of order) */
+      -webkit-text-stroke-width: 1px;
+      -webkit-text-stroke-color: white;
+
+      .marquee-link-wrap {
+        background-color: black;
+      }
+
+      .marquee__item {
+        flex-grow: 1;
+        padding: 5px;
+        text-align: center;
+        position: relative;
+        a {
+          color: white;
+          -webkit-text-fill-color: black; /* Will override color (regardless of order) */
+          -webkit-text-stroke-width: 1px;
+          -webkit-text-stroke-color: white;
+          font-size: $font-size-h1;
+        }
+      }
+
+      .marquee__dash {
+        display: block;
+        position: absolute;
+        right: -8px;
+        top: calc(50% - 3px);
+        width: 16px;
+        height: 6px;
+        color: white;
+        background-color: black;
+        border: 1px solid white;
+      }
     }
 
-    h3 {
+    .marquee-inner {
+      display: block;
+      width: 200%;
+      margin: 0;
+      position: absolute;
+      animation: marquee 15s linear infinite;
+    }
+
+    .marquee-inner:hover {
+      animation-play-state: paused;
+    }
+
+    .marquee-link-wrap {
+      float: left;
+      width: 50%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      height: 100%;
+      background-color: white;
+    }
+
+    .marquee__item {
+      flex-grow: 1;
+      padding: 5px;
+      text-align: center;
+      position: relative;
+      a {
+        color: black;
+        -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+        -webkit-text-stroke-width: 1px;
+        -webkit-text-stroke-color: black;
+        font-size: $font-size-h1;
+      }
+    }
+
+    .marquee__dash {
+      display: block;
+      position: absolute;
+      right: -8px;
+      top: calc(50% - 3px);
+      width: 16px;
+      height: 6px;
+      color: black;
+      background-color: white;
+      border: 1px solid black;
+    }
+
+    h1 {
       display: inline;
       margin: 0 2em;
     }
@@ -99,10 +170,11 @@
       font-family: $sans;
       color: white;
       text-decoration: none;
-      h3 {
+      h1 {
         display: inline;
         margin: 0 2em;
         font-family: $sans;
+        font-size: 50px;
       }
     }
   }

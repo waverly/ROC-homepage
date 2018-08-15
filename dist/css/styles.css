@@ -28,7 +28,7 @@ h1,
 h2,
 h3,
 h4 {
-  letter-spacing: 3px;
+  letter-spacing: 7px;
   -webkit-margin-before: 0em;
   -webkit-margin-after: 0em; }
 
@@ -51,6 +51,7 @@ h4 {
 p {
   font-size: 20px;
   line-height: 24px;
+  letter-spacing: 3px;
   -webkit-margin-before: 1em;
   -webkit-margin-after: 1em;
   -webkit-margin-start: 0px;
@@ -94,15 +95,10 @@ p {
     font-size: 20px;
     line-height: 24px; } }
 @keyframes marquee {
-  from {
-    transform: translateX(100%); }
-  to {
-    transform: translateX(-100%); } }
-@keyframes marquee2 {
-  from {
-    transform: translateX(0%); }
-  to {
-    transform: translateX(-200%); } }
+  0% {
+    left: 0; }
+  100% {
+    left: -100%; } }
 .index {
   padding-bottom: 100px;
   /* .......... */ }
@@ -146,35 +142,103 @@ p {
     position: fixed;
     bottom: 0;
     left: 0;
-    height: 75px;
-    background: black;
-    color: white;
-    min-width: 100%;
-    width: auto;
+    right: 0;
+    height: 100px;
+    width: 100vw;
+    background: white;
+    color: black;
+    -webkit-text-fill-color: white;
+    /* Will override color (regardless of order) */
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 2;
     overflow: hidden;
     white-space: nowrap; }
-    .index .marquee .div1 {
-      display: inline-block;
-      animation: marquee 10s linear infinite; }
-    .index .marquee .div2 {
-      display: inline-block;
-      animation: marquee2 10s linear infinite;
-      animation-delay: 5s; }
-    .index .marquee h3 {
+    .index .marquee:hover {
+      background: black;
+      color: white;
+      -webkit-text-fill-color: black;
+      /* Will override color (regardless of order) */
+      -webkit-text-stroke-width: 1px;
+      -webkit-text-stroke-color: white; }
+      .index .marquee:hover .marquee-link-wrap {
+        background-color: black; }
+      .index .marquee:hover .marquee__item {
+        flex-grow: 1;
+        padding: 5px;
+        text-align: center;
+        position: relative; }
+        .index .marquee:hover .marquee__item a {
+          color: white;
+          -webkit-text-fill-color: black;
+          /* Will override color (regardless of order) */
+          -webkit-text-stroke-width: 1px;
+          -webkit-text-stroke-color: white;
+          font-size: 36px; }
+      .index .marquee:hover .marquee__dash {
+        display: block;
+        position: absolute;
+        right: -8px;
+        top: calc(50% - 3px);
+        width: 16px;
+        height: 6px;
+        color: white;
+        background-color: black;
+        border: 1px solid white; }
+    .index .marquee .marquee-inner {
+      display: block;
+      width: 200%;
+      margin: 0;
+      position: absolute;
+      animation: marquee 15s linear infinite; }
+    .index .marquee .marquee-inner:hover {
+      animation-play-state: paused; }
+    .index .marquee .marquee-link-wrap {
+      float: left;
+      width: 50%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      height: 100%;
+      background-color: white; }
+    .index .marquee .marquee__item {
+      flex-grow: 1;
+      padding: 5px;
+      text-align: center;
+      position: relative; }
+      .index .marquee .marquee__item a {
+        color: black;
+        -webkit-text-fill-color: white;
+        /* Will override color (regardless of order) */
+        -webkit-text-stroke-width: 1px;
+        -webkit-text-stroke-color: black;
+        font-size: 36px; }
+    .index .marquee .marquee__dash {
+      display: block;
+      position: absolute;
+      right: -8px;
+      top: calc(50% - 3px);
+      width: 16px;
+      height: 6px;
+      color: black;
+      background-color: white;
+      border: 1px solid black; }
+    .index .marquee h1 {
       display: inline;
       margin: 0 2em; }
     .index .marquee a {
       font-family: lack, "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
       color: white;
       text-decoration: none; }
-      .index .marquee a h3 {
+      .index .marquee a h1 {
         display: inline;
         margin: 0 2em;
-        font-family: lack, "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; }
+        font-family: lack, "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+        font-size: 50px; }
   .index #read-more {
     cursor: pointer; }
   .index .expanded-text {
