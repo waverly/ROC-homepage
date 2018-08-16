@@ -112,34 +112,40 @@ Prismic.api(apiEndpoint)
 
       // append both to .marquee-inner
 
-      const span = document.createElement("span");
-      const hyphen = document.createElement("h1");
-      hyphen.innerHTML = "-";
-      const makeClone = () => hyphen.cloneNode(true);
+      const marqueeLinkWrap = document.createElement("div");
+      marqueeLinkWrap.classList.add("marquee-link-wrap");
 
-      // social.map((s, index, array) => {
-      //   const link = s.link.url;
-      //   const title = s.title[0].text;
-      //   const a = document.createElement("a");
-      //   const h1 = document.createElement("h1");
-      //   h1.innerHTML = `${title}`;
-      //   a.setAttribute("href", link);
-      //   a.setAttribute("target", "_blank");
-      //   a.appendChild(h1);
-      //
-      //   span.appendChild(a);
-      //   span.appendChild(makeClone());
-      //   console.log(s, index);
-      //
-      //   // span.appendChild(a);
-      //
-      //   if (span.childElementCount === social.length) {
-      //     const spanClone = span.cloneNode(true);
-      //     document.querySelector(".marquee-inner").appendChild(span);
-      //     document.querySelector(".marquee-inner").appendChild(spanClone);
-      //     console.log(span, spanClone);
-      //   }
-      // });
+      const makeClone = toClone => toClone.cloneNode(true);
+
+      const createMarqueeItem = s => {
+        const divWrapper = document.createElement("div");
+        divWrapper.classList.add("marquee__item");
+        const link = s.link.url;
+        const title = s.title[0].text;
+        const a = document.createElement("a");
+        const h1 = document.createElement("h1");
+        const dashSpan = document.createElement("span");
+        dashSpan.classList.add("marquee__dash");
+
+        h1.innerHTML = `${title}`;
+        a.setAttribute("href", link);
+        a.setAttribute("target", "_blank");
+        a.appendChild(h1);
+        divWrapper.appendChild(a);
+        divWrapper.appendChild(dashSpan);
+        return divWrapper;
+      };
+
+      social.map((s, index, array) => {
+        marqueeLinkWrap.appendChild(createMarqueeItem(s));
+        if (marqueeLinkWrap.childElementCount === social.length) {
+          const marqueeParent = document.querySelector(".marquee-inner");
+          console.log("below should be the clone");
+          console.log(makeClone(marqueeLinkWrap));
+          marqueeParent.appendChild(makeClone(marqueeLinkWrap));
+          marqueeParent.appendChild(makeClone(marqueeLinkWrap));
+        }
+      });
 
       document.querySelector(".text-wrap").classList.add("loaded");
     },
@@ -393,6 +399,7 @@ THREE.STLLoader.prototype = {
 window.onload = e => {
   const readMore = document.querySelector("#read-more");
   const section = document.querySelector(".expanded-text");
+  const wrapper = document.querySelector(".container");
 
   readMore.addEventListener("click", () => {
     const isCollapsed = section.getAttribute("data-collapsed") === "true";
@@ -457,35 +464,27 @@ window.onload = e => {
   var renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
   // sets background color
-  renderer.setClearColor(0x000000, 0.8);
+  renderer.setClearColor(0x111111, 0.8);
   document.querySelector(".container").appendChild(renderer.domElement);
 
   var distance = 400;
 
-  var FOV = 2 * Math.atan(window.innerHeight / (2 * distance)) * 90 / Math.PI;
-  console.log(FOV);
+  var FOV = 2 * Math.atan(window.innerHeight / (2 * distance)) * 40 / Math.PI;
 
   var camera = new THREE.PerspectiveCamera(
-    // FOV,
     FOV,
     window.innerWidth / window.innerHeight,
     1,
     20000
   );
 
-  // to view cube, reveal this block and comment out other camer aset ups
-  // var camera = new THREE.PerspectiveCamera(
-  //   75,
-  //   window.innerWidth / window.innerHeight,
-  //   0.1,
-  //   1000
-  // );
-
   camera.up.set(0, 0, 1);
-  camera.position.set(width / 2, -height / 2, 1000);
-  // camera.position.set(0, 0, 1000);
-  // camera.lookAt(new THREE.Vector3(centre[0], centre[1], centre[2]));
-  camera.lookAt(scene.position);
+  // camera.position.set(width / 2, -height / 2, 500);
+  camera.position.set(width / 2, -height / 0.5, 500);
+  camera.lookAt(new THREE.Vector3(centre[0], centre[1], centre[2]));
+  // camera.position.z = 5;
+  // camera.position.x = 10;
+  // camera.position.z = 100;
 
   scene.add(camera);
   window.addEventListener("resize", onWindowResize);
@@ -528,12 +527,18 @@ window.onload = e => {
   //Load dancer
   loader.load(
     // "https://res.cloudinary.com/al-ro/raw/upload/v1531776249/ballerina_1_mu2pmx.stl",
-    "https://res.cloudinary.com/dzlun7snb/raw/upload/v1534113088/glasses.stl",
+    "https://res.cloudinary.com/dzlun7snb/raw/upload/v1534374363/TRY_THIS_AUG_12.stl",
     function(geometry) {
       var mesh = new THREE.Mesh(geometry, material_d);
 
-      mesh.scale.set(depth / 22, depth / 22, depth / 22);
-      mesh.position.set(-250, -50, -depth / 3 + 475);
+      // mesh.scale.set(depth / 22, depth / 22, depth / 22);
+      // mesh.position.set(-20, -30, -depth / 3 + 75);
+
+      mesh.scale.set(depth / 28, depth / 28, depth / 28);
+      mesh.position.set(-450, -50, -depth / 5 + 475);
+
+      // mesh.lookAt(1, 2, 1);
+
       // mesh.rotation.x = -40 * Math.PI / 180;
       // mesh.rotation.y = -20 * Math.PI / 180;
 
@@ -828,7 +833,7 @@ window.onload = e => {
   // var cube = new THREE.Mesh(geometry, material);
   // scene.add(cube);
   //
-  // camera.position.z = 5;
+
   //
   function animate() {
     move();

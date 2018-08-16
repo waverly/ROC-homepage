@@ -7,6 +7,9 @@
   src: url(../assets/Lack-Regular.otf) format("opentype");
   font-weight: 400; }
 /*....................................................................................*/
+* {
+  box-sizing: border-box; }
+
 body {
   margin: 0 auto;
   min-height: 100vh;
@@ -45,17 +48,21 @@ h3 {
   line-height: 40px; }
 
 h4 {
-  font-size: 20px;
-  line-height: 28px; }
+  font-size: 24px;
+  line-height: 30px; }
 
 p {
-  font-size: 20px;
-  line-height: 24px;
+  font-size: 24px;
+  line-height: 30px;
   letter-spacing: 3px;
   -webkit-margin-before: 1em;
   -webkit-margin-after: 1em;
   -webkit-margin-start: 0px;
   -webkit-margin-end: 0px; }
+
+a {
+  font-family: lack, "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  text-decoration: none; }
 
 .sans {
   font-family: lack, "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; }
@@ -76,20 +83,20 @@ p {
     font-family: canet, serif; }
 
   h1 {
-    font-size: 40px;
-    line-height: 44px; }
+    font-size: 32px;
+    line-height: 36px; }
 
   h2 {
-    font-size: 34px;
-    line-height: 36px; }
+    font-size: 30px;
+    line-height: 34px; }
 
   h3 {
     font-size: 28px;
     line-height: 32px; }
 
   h4 {
-    font-size: 22px;
-    line-height: 28px; }
+    font-size: 28px;
+    line-height: 32px; }
 
   p {
     font-size: 20px;
@@ -209,7 +216,9 @@ p {
       flex-grow: 1;
       padding: 5px;
       text-align: center;
-      position: relative; }
+      position: relative;
+      display: flex;
+      justify-content: center; }
       .index .marquee .marquee__item a {
         color: black;
         -webkit-text-fill-color: white;
@@ -227,23 +236,32 @@ p {
       color: black;
       background-color: white;
       border: 1px solid black; }
-    .index .marquee h1 {
-      display: inline;
-      margin: 0 2em; }
     .index .marquee a {
       font-family: lack, "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
       color: white;
       text-decoration: none; }
       .index .marquee a h1 {
         display: inline;
-        margin: 0 2em;
         font-family: lack, "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-        font-size: 50px; }
+        font-size: 70px; }
   .index #read-more {
     cursor: pointer; }
   .index .expanded-text {
     overflow: hidden;
     transition: height 0.3s ease-out;
     height: 0; }
+
+@media all and (max-width: 1200px) {
+  .index .marquee .marquee-inner {
+    width: 300%; } }
+@media all and (max-width: 768px), all and (max-width: 830px) and (orientation: landscape) {
+  .index .text-wrap #header {
+    hyphens: auto; }
+  .index .marquee {
+    height: 75px; }
+    .index .marquee .marquee-inner {
+      width: 500%; }
+    .index .marquee a h1 {
+      font-size: 50px; } }
 
 /*# sourceMappingURL=styles.css.map */

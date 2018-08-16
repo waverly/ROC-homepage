@@ -73,6 +73,7 @@
     z-index: 2;
     overflow: hidden;
     white-space: nowrap;
+    // display: none;
 
     &:hover {
       background: black;
@@ -140,6 +141,9 @@
       padding: 5px;
       text-align: center;
       position: relative;
+      display: flex;
+      justify-content: center;
+      // outline: solid 2px red;
       a {
         color: black;
         -webkit-text-fill-color: white; /* Will override color (regardless of order) */
@@ -161,20 +165,14 @@
       border: 1px solid black;
     }
 
-    h1 {
-      display: inline;
-      margin: 0 2em;
-    }
-
     a {
       font-family: $sans;
       color: white;
       text-decoration: none;
       h1 {
         display: inline;
-        margin: 0 2em;
         font-family: $sans;
-        font-size: 50px;
+        font-size: 70px;
       }
     }
   }
@@ -192,8 +190,34 @@
   // }
 }
 
+@media all and (max-width: 1200px) {
+  .index {
+    .marquee {
+      .marquee-inner {
+        width: 300%;
+      }
+    }
+  }
+}
+
 @media all and (max-width: 768px),
   all and (max-width: 830px) and (orientation: landscape) {
   .index {
+    .text-wrap {
+      #header {
+        hyphens: auto;
+      }
+    }
+    .marquee {
+      height: 75px;
+      .marquee-inner {
+        width: 500%;
+      }
+      a {
+        h1 {
+          font-size: 50px;
+        }
+      }
+    }
   }
 }
